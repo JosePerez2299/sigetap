@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
+from datetime import timedelta
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -41,6 +42,7 @@ INSTALLED_APPS = [
     # Third-party applications
     'corsheaders',
     'rest_framework',
+    'rest_framework_simplejwt',
     # Applications
     'core.users',
     'core.proyectos',
@@ -51,10 +53,37 @@ INSTALLED_APPS = [
     'core.login',
     'core.api',
     'drf_spectacular'
+
 ]
 
+
+
+
+SPECTACULAR_SETTINGS = {
+ 
+    'TAGS': [
+        {'name': 'Proyectos', 'description': 'Gestión de proyectos'},
+    ],
+    'ENUM_ADD_EXPLICIT_BLANK_NULL_CHOICE': False,
+    # Opcional: agrupa rutas cuyo path empiece con "/api/proyectos"
+    'TAGGERS': [
+        'drf_spectacular.pluggable.TaggerByPathPrefix',
+    ],
+    'TAGS_BY_PATH_PREFIX': {
+        '/api/proyectos/': 'Proyectos',
+    },
+}
+
 REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ],
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+}
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
 }
 
 MIDDLEWARE = [
@@ -88,7 +117,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'config.wsgi.application'
-
+AUTH_USER_MODEL = 'users.User'
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
@@ -144,3 +173,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # CORS settings
 CORS_ALLOWED_ORIGINS = [ ]
+
+AUTHENTICATION_BACKENDS = [
+    'core.login.auth_backends.DummyLDAPBackend',
+    'django.contrib.auth.backends.ModelBackend',
+]
