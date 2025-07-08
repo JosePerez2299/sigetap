@@ -8,7 +8,8 @@ from .serializers import LDAPTokenObtainPairSerializer
 class LoginView(TokenObtainPairView):
     """
     Recibe { "username": "...", "password": "..." }:
-    - Valida contra LDAP ( por ahora data dummy).
-    - Devuelve JSON { access: "...", refresh: "..." }.
+    - Valida contra LDAP ( por ahora data dummy, falta implementar).
+    - Devuelve JSON { access: "...", refresh: "..." }
+    .
     """
     serializer_class = LDAPTokenObtainPairSerializer
