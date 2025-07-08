@@ -13,7 +13,9 @@ def crear_grupos_roles(sender, **kwargs):
         {'nombre': UserRole.ADMINISTRADOR, 'perms': []}, 
         {'nombre': UserRole.GERENTE, 'perms': []}, 
         {'nombre': UserRole.COORDINADOR, 'perms': []}, 
-        {'nombre': UserRole.MIEMBRO, 'perms': []}
+        {'nombre': UserRole.MIEMBRO, 'perms': []},
+        {'nombre': UserRole.LIDER, 'perms': []}
+
     ]
     for rol in roles:
         grupo, creado = Group.objects.get_or_create(name=rol['nombre'])

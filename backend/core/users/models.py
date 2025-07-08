@@ -8,6 +8,7 @@ class UserRole:
         GERENTE = 'Gerente'
         COORDINADOR = 'Coordinador'
         MIEMBRO = 'Miembro'
+        LIDER = 'Lider'
 
 # Create your models here.
 class User(AbstractUser):
@@ -18,7 +19,7 @@ class User(AbstractUser):
     """
     
     # Datos personales
-    p00 = models.CharField(max_length=100,unique=True,  help_text="Identificador único del usuario")
+    p00 = models.CharField(max_length=100,unique=True, null=True, help_text="Identificador único del usuario")
     telefono = models.CharField(max_length=15, blank=True, null=True)
 
     # Campos del LDAP
@@ -29,12 +30,15 @@ class User(AbstractUser):
     # Campos adicionales
     nom_coordinacion = models.CharField(max_length=100, blank=True, null=True)
     nom_departamento = models.CharField(max_length=100, blank=True, null=True)
-    es_lider = models.BooleanField(default=False, help_text="Indica si el usuario es un líder de proyecto")
+
+    class Meta:
+        verbose_name = 'Usuario'
+        verbose_name_plural = 'Usuarios'
+        ordering = ['username']
 
     def __str__(self):
         return self.get_full_name() or self.username
     
-
     @property
     def es_admin(self):
         return self.groups.filter(name=UserRole.ADMINISTRADOR).exists()
@@ -47,3 +51,6 @@ class User(AbstractUser):
     @property
     def es_miembro(self):
         return self.groups.filter(name=UserRole.MIEMBRO).exists()
+    @property
+    def es_lider(self):
+        return self.groups.filter(name=UserRole.LIDER).exists()
