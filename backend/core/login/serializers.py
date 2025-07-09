@@ -2,7 +2,15 @@
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from django.contrib.auth import authenticate
 from rest_framework import exceptions
+from rest_framework import serializers
+from core.users.serializers import UserSerializer  # Assuming you have a UserSerializer defined
 
+
+class LDAPTokenResponseSerializer(serializers.Serializer):
+    access = serializers.CharField()
+    refresh = serializers.CharField()
+    user = UserSerializer()
+    
 
 class LDAPTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
@@ -22,17 +30,5 @@ class LDAPTokenObtainPairSerializer(TokenObtainPairSerializer):
             raise exceptions.AuthenticationFailed('Credenciales inválidas', 'invalid_credentials')
         # continua con la generación del token
         data = super().validate(attrs)
-        data['user'] = {
-            'id': user.pk,
-            'username': user.username,
-            'email': user.email,
-            'first_name': user.first_name,
-            'last_name': user.last_name,
-            'p00': user.p00,
-            'nom_gerencia_general': user.nom_gerencia_general,
-            'nom_unidad': user.nom_unidad,
-            'nom_unidad_reporta': user.nom_unidad_reporta,
-            'nom_coordinacion': user.nom_coordinacion,
-            'nom_departamento': user.nom_departamento,
-        }
+        data['user'] = UserSerializer(user).data
         return data
