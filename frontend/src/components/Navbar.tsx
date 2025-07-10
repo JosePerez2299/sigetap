@@ -1,43 +1,77 @@
-import { AppBar, Toolbar, Typography, Button, IconButton } from '@mui/material';
-import { Link } from 'react-router-dom';
+import AppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
+import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
+import { Box, Button, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 export default function Navbar() {
+  const [drawerOpen, setDrawerOpen] = useState(false);
+
+  const toggleDrawer = (open: boolean) => () => {
+    setDrawerOpen(open);
+  };
+
+  const navLinks = [
+    { label: 'Home', path: '/' },
+    { label: 'About', path: '/about' },
+    { label: 'Dashboard', path: '/dashboard' },
+  ];
+
   return (
-    <AppBar position="static" sx={{ mb: 2 }}>
-      <Toolbar>
-        <IconButton edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }}>
-          <MenuIcon />
-        </IconButton>
+    <>
+      <AppBar position="static">
+        <Toolbar>
+          {/* Logo / Título */}
+          <Typography variant="h6" sx={{ flexGrow: 1 }}>
+            My App
+          </Typography>
 
-        <Typography variant="h6" sx={{ flexGrow: 1 }}>
-          App de prueba
-        </Typography>
+          {/* Links visibles en desktop */}
+          <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
+            {navLinks.map((item) => (
+              <Button key={item.path} component={Link} to={item.path} color="inherit">
+                {item.label}
+              </Button>
+            ))}
+          </Box>
 
-        <Button color="inherit" component={Link} to="/about">
-            About
-        </Button>
-        <Button color="inherit" component={Link} to="/dashboard">
-          Dashboard
-        </Button>
-        <Button
-          variant="outlined"
-          color="inherit"
-          component={Link}
-          to="/"
-          sx={{
-            ml: 1,
-            borderColor: 'white',
-            color: 'white',
-            '&:hover': {
-              borderColor: 'white',
-              backgroundColor: 'rgba(255,255,255,0.1)',
-            },
-          }}
+          {/* Menu icon visible en mobile */}
+          <IconButton
+            color="inherit"
+            edge="end"
+            onClick={toggleDrawer(true)}
+            sx={{ display: { sm: 'none' } }}
+          >
+            <MenuIcon />
+          </IconButton>
+        </Toolbar>
+      </AppBar>
+
+      {/* Drawer para mobile */}
+      <Drawer anchor="right" open={drawerOpen} onClose={toggleDrawer(false)}>
+        <Box
+          sx={{ width: 250 }}
+          role="presentation"
+          onClick={toggleDrawer(false)}
+          onKeyDown={toggleDrawer(false)}
         >
-          Login
-        </Button>
-      </Toolbar>
-    </AppBar>
+          <List>
+            {navLinks.map((item) => (
+              
+        // Usa esto (v5):
+        <ListItem key={item.label} disablePadding>
+          <ListItemButton component="a" href={item.path}>
+            <ListItemIcon>{item.path}</ListItemIcon>
+            <ListItemText primary={item.label} />
+          </ListItemButton>
+        </ListItem>
+            ))}
+          </List>
+        </Box>
+      </Drawer>
+    </>
   );
 }
