@@ -9,7 +9,7 @@ import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 import { Provider } from 'react-redux'
-import { store } from './store/RootState.ts'
+import store from './store/RootState.ts'
 
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 

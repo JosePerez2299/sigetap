@@ -1,27 +1,12 @@
-import { configureStore, createSlice } from '@reduxjs/toolkit';
+import { configureStore } from "@reduxjs/toolkit";
+import authReducer from "./auth/authSlice";
 
-// Slice dummy inicial para el estado global
-const appSlice = createSlice({
-  name: 'app',
-  initialState: {
-    status: 'idle',
-    version: '1.0.0',
-  },
-  reducers: {
-    setStatus: (state, action) => {
-      state.status = action.payload;
-    },
-  },
-});
-
-export const { setStatus } = appSlice.actions;
-
-export const store = configureStore({
+const store = configureStore({
   reducer: {
-    app: appSlice.reducer,
+    auth: authReducer,
   },
 });
 
-// Tipos para usar con useSelector y useDispatch
+
 export type RootState = ReturnType<typeof store.getState>;
-export type AppDispatch = typeof store.dispatch;
+export default store;

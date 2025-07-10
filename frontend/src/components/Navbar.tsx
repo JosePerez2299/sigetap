@@ -6,6 +6,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import { Box, Button, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import ROUTES from '../routes/Routes';
 
 export default function Navbar() {
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -15,9 +16,11 @@ export default function Navbar() {
   };
 
   const navLinks = [
-    { label: 'Home', path: '/' },
-    { label: 'About', path: '/about' },
-    { label: 'Dashboard', path: '/dashboard' },
+    { label: 'Dashboard', path: ROUTES.DASHBOARD },
+    { label: 'Home', path: ROUTES.HOME },
+    { label: 'About', path: ROUTES.ABOUT },
+    { label: 'Logout', path: '#' },
+
   ];
 
   return (
@@ -32,7 +35,7 @@ export default function Navbar() {
           {/* Links visibles en desktop */}
           <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
             {navLinks.map((item) => (
-              <Button key={item.path} component={Link} to={item.path} color="inherit">
+              <Button key={item.path} component={Link} to={item.path} color="inherit" >
                 {item.label}
               </Button>
             ))}
@@ -63,7 +66,7 @@ export default function Navbar() {
               
         // Usa esto (v5):
         <ListItem key={item.label} disablePadding>
-          <ListItemButton component="a" href={item.path}>
+          <ListItemButton component="a" href={item.path} onClick={toggleDrawer(false)}>
             <ListItemIcon>{item.path}</ListItemIcon>
             <ListItemText primary={item.label} />
           </ListItemButton>

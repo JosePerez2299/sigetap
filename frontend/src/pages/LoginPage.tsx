@@ -3,7 +3,7 @@ import AuthForm from "../features/auth/AuthForm"
 const LoginPage = () => {
   return (
     <div>
-      LoginPage
+      <h1>Login</h1>
       <AuthForm/>
     </div>
   )
