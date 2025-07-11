@@ -9,9 +9,8 @@ const PublicRoute = () => {
     (state: RootState) => state.auth.isAuthenticated
   );
 
-  console.log(isAuthenticated);
   // Si está autenticado, redirige al dashboard (o home)
-  return isAuthenticated ? <Navigate to={ROUTES.HOME} replace /> : <Outlet />;
+  return isAuthenticated ? <Navigate to={ROUTES.DASHBOARD} replace /> : <Outlet />;
 };
 
 export default PublicRoute;
