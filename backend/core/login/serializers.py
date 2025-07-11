@@ -5,21 +5,13 @@ from rest_framework import exceptions
 from rest_framework import serializers
 from core.users.serializers import UserSerializer  # Assuming you have a UserSerializer defined
 
-
-class LDAPTokenResponseSerializer(serializers.Serializer):
+class GenericTokenResponseSerializer(serializers.Serializer):
     access = serializers.CharField()
     refresh = serializers.CharField()
     user = UserSerializer()
     
 
-class LDAPTokenObtainPairSerializer(TokenObtainPairSerializer):
-    @classmethod
-    def get_token(cls, user):
-        # usando el método estándar para añadir claims extra si quieres
-        token = super().get_token(user)
-        token['es_lider'] = getattr(user, 'es_lider', False)
-        return token
-
+class GenericTokenObtainPairSerializer(TokenObtainPairSerializer):
     def validate(self, attrs):
         # 'username' y 'password' vienen del payload
         user = authenticate(
@@ -27,8 +19,9 @@ class LDAPTokenObtainPairSerializer(TokenObtainPairSerializer):
             password=attrs['password'],
         )
         if not user:
-            raise exceptions.AuthenticationFailed('Credenciales inválidas', 'invalid_credentials')
+            raise exceptions.AuthenticationFailed('Credenciales inválidas')
         # continua con la generación del token
         data = super().validate(attrs)
         data['user'] = UserSerializer(user).data
+        
         return data

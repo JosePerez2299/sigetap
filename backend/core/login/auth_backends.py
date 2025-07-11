@@ -151,21 +151,60 @@ class DummyLDAPBackend(BaseBackend):
     y crea el usuario en DB si no existe.
     """
     def authenticate(self, request, username=None, password=None, **kwargs):
+        """
+        Autentica al usuario contra el diccionario dummy
+        """
+        # Validar que tenemos username y password
+        if not username or not password:
+            return None
+            
         # Aquí iría tu llamada real a LDAP
         if username in DUMMY_USERS and DUMMY_USERS[username] == password:
-            user, created = User.objects.get_or_create(username=username, defaults={
-                'email': DATA_USERS[username]['email'],
-                'p00':  DATA_USERS[username]['p00'],
-                'nom_gerencia_general': DATA_USERS[username]['nom_gerencia_general'],
-                'nom_unidad': DATA_USERS[username]['nom_unidad'],
-                'nom_unidad_reporta': DATA_USERS[username]['nom_unidad_reporta'],
-            })
-            return user
+            try:
+                # Intentar obtener el usuario existente
+                user = User.objects.get(username=username)
+                
+                # Actualizar datos del usuario en caso de que hayan cambiado
+                user_data = DATA_USERS[username]
+                user.email = user_data['email']
+                user.p00 = user_data['p00']
+                user.nom_gerencia_general = user_data['nom_gerencia_general']
+                user.nom_unidad = user_data['nom_unidad']
+                user.nom_unidad_reporta = user_data['nom_unidad_reporta']
+                
+                # Asegurar que el usuario esté activo
+                user.is_active = True
+                user.save()
+                
+                return user
+                
+            except User.DoesNotExist:
+                # Crear nuevo usuario si no existe
+                user_data = DATA_USERS[username]
+                user = User.objects.create_user(
+                    username=username,
+                    email=user_data['email'],
+                    p00=user_data['p00'],
+                    nom_gerencia_general=user_data['nom_gerencia_general'],
+                    nom_unidad=user_data['nom_unidad'],
+                    nom_unidad_reporta=user_data['nom_unidad_reporta'],
+                    is_active=True,  # Importante: activar el usuario
+                )
+                return user
+        
         return None
 
     def get_user(self, user_id):
+        """
+        Obtiene el usuario por ID
+        """
         try:
             return User.objects.get(pk=user_id)
         except User.DoesNotExist:
             return None
-            
+    
+    def user_can_authenticate(self, user):
+        """
+        Verifica si el usuario puede autenticarse
+        """
+        return getattr(user, 'is_active', None)
