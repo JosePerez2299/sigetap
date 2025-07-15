@@ -1,31 +1,35 @@
-import { useState } from "react";
-import { loginService } from "../services/authServices";
+import { useDispatch, useSelector } from "react-redux";
+import { clearError } from "../store/auth/authSlice";
 import type { Credentials } from "../types/authTypes";
-import type { LoginResponseType } from "../types/authTypes";
-import { handleErrorMessage } from "../../utils/handleErrorMessage";
-import type { User } from "../types/userTypes";
+import type { RootState, AppDispatch } from "../store/RootState"; // Asegúrate de tener estos tipos
+import { loginThunk, logoutThunk } from "../store/auth/authThunks";
 
-export const useAuth = () => {
-  const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+export function useAuth() {
+  const dispatch = useDispatch<AppDispatch>();
+  const { user, loading, error } = useSelector(
+    (state: RootState) => state.auth
+  );
 
-  const login = async (
-    credentials: Credentials
-  ): Promise<LoginResponseType | null> => {
-    setLoading(true);
-    setError(null);
-    try {
-      const data = await loginService(credentials);
-      setUser(data.user);
-      return data;
-    } catch (err: any) {
-      setError(handleErrorMessage(err));
-      return null;
-    } finally {
-      setLoading(false);
-    }
+  const login = async (credentials: Credentials) => {
+    const result = await dispatch(loginThunk(credentials));
+    return result;
   };
 
-  return { login, loading, error, user };
-};
+  const logout = async () => {
+    const result = await dispatch(logoutThunk());
+    return result;
+  };
+
+  const clearAuthError = () => {
+    dispatch(clearError());
+  };
+
+  return {
+    user,
+    login,
+    logout,
+    loading,
+    error,
+    clearAuthError,
+  };
+}

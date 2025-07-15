@@ -5,11 +5,9 @@ import type { RootState } from "../store/RootState";
 import ROUTES from "./Routes";
 
 const PrivateRoute = () => {
-  const isAuthenticated = useSelector(
-    (state: RootState) => state.auth.isAuthenticated
-  );
+  const user = useSelector((state: RootState) => state.auth.user);
 
-  return isAuthenticated ? <Outlet /> : <Navigate to={ROUTES.LOGIN} replace />;
+  return user ? <Outlet /> : <Navigate to={ROUTES.LOGIN} replace />;
 };
 
 export default PrivateRoute;

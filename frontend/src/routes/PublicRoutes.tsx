@@ -4,13 +4,10 @@ import type { RootState } from "../store/RootState";
 import ROUTES from "./Routes";
 
 const PublicRoute = () => {
-  
-  const isAuthenticated = useSelector(
-    (state: RootState) => state.auth.isAuthenticated
-  );
+  const user = useSelector((state: RootState) => state.auth.user);
 
   // Si está autenticado, redirige al dashboard (o home)
-  return isAuthenticated ? <Navigate to={ROUTES.DASHBOARD} replace /> : <Outlet />;
+  return user ? <Navigate to={ROUTES.DASHBOARD} replace /> : <Outlet />;
 };
 
 export default PublicRoute;

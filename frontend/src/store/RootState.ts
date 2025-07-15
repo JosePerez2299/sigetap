@@ -7,6 +7,8 @@ const store = configureStore({
   },
 });
 
-
 export type RootState = ReturnType<typeof store.getState>;
+
+// Inferir el tipo AppDispatch del store
+export type AppDispatch = typeof store.dispatch;
 export default store;

@@ -1,17 +1,32 @@
+import { createAsyncThunk } from "@reduxjs/toolkit";
+import type { Credentials } from "../../types/authTypes";
+import { tokenManager } from "../../utils/tokenManager";
+import { authServices } from "../../services/authServices";
+import { handleErrorMessage } from "../../utils/handleErrorMessage";
 
-import { loginService } from "../../services/authServices";
-import type { Credentials } from "../../types/authTypes"
-import { setUser, setAccessToken } from "../auth/authSlice";
-
-
-export const loginThunk = async (credentials: Credentials) => {
-    const response = await loginService(credentials);
-
-
-    if (response) {
-        setUser(response.user);
-        setAccessToken(response.access);
-        return response;
+// Thunk para login
+export const loginThunk = createAsyncThunk(
+  "auth/login",
+  async (credentials: Credentials, { rejectWithValue }) => {
+    try {
+      const response = await authServices.login(credentials);
+      tokenManager.setTokens(response);
+      return response;
+    } catch (error: any) {
+      return rejectWithValue(handleErrorMessage(error));
     }
-    return null;
-}
+  }
+);
+
+// Thunk para logout
+export const logoutThunk = createAsyncThunk(
+  "auth/logout",
+  async (_, { rejectWithValue }) => {
+    try {
+      tokenManager.deleteSession();
+      return null;
+    } catch (error: any) {
+      return rejectWithValue(error.message || "Error en el logout");
+    }
+  }
+);

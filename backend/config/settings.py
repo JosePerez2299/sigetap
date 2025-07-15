@@ -42,8 +42,9 @@ INSTALLED_APPS = [
     # Third-party applications
     'corsheaders',
     'rest_framework',
-    'rest_framework_simplejwt',
-    'rest_framework_simplejwt.token_blacklist',  #
+    'rest_framework.authtoken',
+    'dj_rest_auth',
+
     # Applications
     'core.users',
     'core.proyectos',
@@ -56,8 +57,6 @@ INSTALLED_APPS = [
     'drf_spectacular'
 
 ]
-
-
 
 
 SPECTACULAR_SETTINGS = {
@@ -75,24 +74,6 @@ SPECTACULAR_SETTINGS = {
     },
 }
 
-REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
-    ],
-    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
-}
-
-SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
-    # Configuración específica para cookies de refresh token
-    'REFRESH_COOKIE_NAME': 'refresh_token',
-    'REFRESH_COOKIE_DOMAIN': None,
-    'REFRESH_COOKIE_SECURE': True,    # True en producción (HTTPS)
-    'REFRESH_COOKIE_HTTP_ONLY': True,  # Siempre True para seguridad
-    'REFRESH_COOKIE_PATH': '/',
-    'REFRESH_COOKIE_SAMESITE': 'Lax',
-}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -211,3 +192,24 @@ AUTHENTICATION_BACKENDS = [
     'core.login.auth_backends.DummyLDAPBackend',
     'django.contrib.auth.backends.ModelBackend',
 ]
+
+# JWT Settings
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+}
+
+# djangorestframework-simplejwt
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=1),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
+}
+
+# dj-rest-auth
+REST_AUTH = {
+    "USE_JWT": True,
+    "JWT_AUTH_HTTPONLY": False,
+}
+
