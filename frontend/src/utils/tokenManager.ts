@@ -1,10 +1,11 @@
 import type { LoginResponseType } from "../types/authTypes";
+import type { User } from "../types/generalTypes";
 
 const getTokens = () => {
-  const tokens = {
+  const tokens: { access: string | null; refresh: string | null; user: User | null } = {
     access: sessionStorage.getItem("accessToken"),
     refresh: sessionStorage.getItem("refreshToken"),
-    user: sessionStorage.getItem("userInfo")
+    user : sessionStorage.getItem("userInfo")
       ? JSON.parse(sessionStorage.getItem("userInfo")!)
       : null,
   };
@@ -31,13 +32,15 @@ const setAccessToken = (access: string) => {
 const setRefreshToken = (refresh: string) => {
   sessionStorage.setItem("refreshToken", refresh);
 };
-const setUser = (user: any) => {
+const setUser = (user: User) => {
   sessionStorage.setItem("userInfo", JSON.stringify(user));
 };
 
-const getUser = () => {
-  const userInfo = sessionStorage.getItem("userInfo");
-  return userInfo ? JSON.parse(userInfo) : null;
+const getUser = (): User | null => {
+  const userInfo: string | null = sessionStorage.getItem("userInfo");
+
+  if (!userInfo) return null;
+  return JSON.parse(userInfo) as User;
 };
 
 export const tokenManager = {

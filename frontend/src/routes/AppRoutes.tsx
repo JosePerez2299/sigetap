@@ -4,21 +4,23 @@ import PrivateRoute from "./PrivateRoutes";
 import PublicRoute from "./PublicRoutes";
 import { LoginPage, NotFound404, Dashboard, About } from "../pages/index";
 import HomePage from "../pages/HomePage";
+import Logout from "../pages/Logout";
 
 
 const AppRoutes: React.FC = () => (
   <Routes>
-    # Rutas publicas
+    {/* Rutas publicas */}
     <Route path="/" element={<PublicRoute/>}>
       <Route index element={<HomePage />} />
       <Route path="/login" element={<LoginPage />} />
     </Route>
       
-    # Rutas privadas
+    {/* Rutas privadas */}
     <Route path="/" element={<PrivateRoute />}>
       <Route element={<MainLayout />}>
         <Route path="dashboard" element={<Dashboard />} />
         <Route path="about" element={<About />} />
+        <Route path="logout" element={<Logout />} />
       </Route>
     </Route>
     <Route path="*" element={<NotFound404 />} />
