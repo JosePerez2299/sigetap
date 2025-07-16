@@ -20,3 +20,10 @@ export const LoginResponseSchema = z.object({
 });
 
 export type LoginResponseType = z.infer<typeof LoginResponseSchema>;
+
+
+export const RefreshTokenSchema = z.object({
+  access: z.string(),
+});
+
+export type RefreshTokenType = z.infer<typeof RefreshTokenSchema>;

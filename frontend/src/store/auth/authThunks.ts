@@ -10,7 +10,7 @@ export const loginThunk = createAsyncThunk(
   async (credentials: Credentials, { rejectWithValue }) => {
     try {
       const response = await authServices.login(credentials);
-      tokenManager.setTokens(response);
+      tokenManager.setAfterLogin(response);
       return response;
     } catch (error: any) {
       return rejectWithValue(handleErrorMessage(error));
@@ -27,6 +27,26 @@ export const logoutThunk = createAsyncThunk(
       return null;
     } catch (error: any) {
       return rejectWithValue(error.message || "Error en el logout");
+    }
+  }
+);
+
+
+// Thunk para refresh token
+export const refreshTokenThunk = createAsyncThunk(
+  "auth/refreshToken",
+  async (_, { rejectWithValue }) => {
+
+    try {
+      const refreshToken = tokenManager.getTokens().refresh;
+      if (!refreshToken) {
+        return rejectWithValue("No se encontró un token de refresco");
+      }
+      const response = await authServices.refreshToken(refreshToken);
+      tokenManager.setAccessToken(response.access);
+      return response;
+    } catch (error: any) {
+      return rejectWithValue(handleErrorMessage(error));
     }
   }
 );

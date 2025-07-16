@@ -18,13 +18,19 @@ const deleteSession = () => {
   sessionStorage.removeItem("userInfo");
 };
 
-const setTokens = (data: LoginResponseType) => {
+const setAfterLogin = (data: LoginResponseType) => {
   const { access, refresh, user } = data;
-  sessionStorage.setItem("accessToken", access);
-  sessionStorage.setItem("refreshToken", refresh);
-  sessionStorage.setItem("userInfo", JSON.stringify(user));
+  if (access) setAccessToken(access);
+  if (refresh) setRefreshToken(refresh);
+  if (user) setUser(user);
 };
 
+const setAccessToken = (access: string) => {
+  sessionStorage.setItem("accessToken", access);
+};
+const setRefreshToken = (refresh: string) => {
+  sessionStorage.setItem("refreshToken", refresh);
+};
 const setUser = (user: any) => {
   sessionStorage.setItem("userInfo", JSON.stringify(user));
 };
@@ -37,7 +43,9 @@ const getUser = () => {
 export const tokenManager = {
   getTokens,
   deleteSession,
-  setTokens,
+  setAfterLogin,
+  setAccessToken,
+  setRefreshToken,
   setUser,
   getUser,
 };

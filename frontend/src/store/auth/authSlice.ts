@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { tokenManager } from "../../utils/tokenManager";
-import { loginThunk, logoutThunk } from "./authThunks";
+import { loginThunk, logoutThunk, refreshTokenThunk } from "./authThunks";
 
 const initialState = {
   ...tokenManager.getTokens(),
@@ -49,6 +49,15 @@ const authSlice = createSlice({
         state.error = null;
       })
       .addCase(logoutThunk.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
+      .addCase(refreshTokenThunk.fulfilled, (state, action) => {
+        state.loading = false;
+        state.access = action.payload.access;
+        state.error = null;
+      })
+      .addCase(refreshTokenThunk.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
       });

@@ -1,6 +1,7 @@
 import axios from "axios";
+import { urls } from "./urls";
 
 export const publicApi = axios.create({
-  baseURL: "http://localhost:8000",
+  baseURL: urls.base,
   withCredentials: true,
 });
