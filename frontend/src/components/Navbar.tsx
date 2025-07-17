@@ -28,6 +28,8 @@ import {
   Group,
   Help,
   Search,
+  FactCheck,
+  ViewList,
   Menu as MenuIcon,
 } from "@mui/icons-material";
 import Logo from "./Logo";
@@ -92,9 +94,25 @@ const ModernAppBar = () => {
       icon: <Dashboard />,
       active: true,
     },
-    { name: "Proyectos", to: ROUTES.ABOUT, icon: <Analytics />, active: false },
-    { name: "Usuarios", to: ROUTES.PROFILE, icon: <Group />, active: false },
-    { name: "Ayuda", to: ROUTES.SETTINGS, icon: <Help />, active: false },
+    {
+      name: "Proyectos",
+      to: ROUTES.PROYECTOS,
+      icon: <ViewList />,
+      active: false,
+    },
+
+    {
+      name: "Auditoría",
+      to: ROUTES.AUDITORY,
+      icon: <FactCheck />,
+      active: false,
+    },
+    {
+      name: "Estadísticas",
+      to: ROUTES.STATS,
+      icon: <Analytics />,
+      active: false,
+    },
   ];
 
   const handleOpenUserMenu = (event: any) => {
@@ -145,7 +163,6 @@ const ModernAppBar = () => {
         elevation={0}
         sx={{
           backgroundColor: "rgba(250, 250, 250, 0.8)",
-          borderBottom: `1px solid ${alpha(theme.palette.divider, 0.1)}`,
           backdropFilter: "blur(20px)",
         }}
       >

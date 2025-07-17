@@ -1,13 +1,17 @@
 import LoginPage from "./LoginPage";
 import NotFound404 from "./NotFound404";
 import Dashboard from "./DashboardPage";
-import About from "./AboutPage";
+import ProyectosPage from "./ProyectosPage";
 import HomePage from "./HomePage";
+import AuditoryPage from "./AuditoryPage";
+import StatsPage from "./StatsPage";
 
 export {
     LoginPage,
     NotFound404,
     Dashboard,
-    About,
-    HomePage
-}
+    ProyectosPage,
+    HomePage,
+    AuditoryPage,
+    StatsPage
+}   

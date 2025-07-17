@@ -8,7 +8,7 @@ import { Box } from '@mui/material';
 const MainLayout: React.FC = () => (
   <>
     <Navbar />
-    <Box sx={{ padding: '20px', backgroundColor: 'primary.main', textColor: 'primary.main' }}>
+    <Box sx={{ padding: '20px' }}>
     <main >
       <Container>
         <Outlet />

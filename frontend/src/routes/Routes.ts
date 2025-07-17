@@ -2,10 +2,15 @@ const ROUTES = {
   APP: '/app',
   HOME: '/home',
   LOGIN: '/login',
-  DASHBOARD: '/dashboard',
-  PROFILE: '/profile',
-  ABOUT: '/about',
-  SETTINGS: '/settings',
+  DASHBOARD: '/inicio',
+  PROFILE: '/perfil',
+  PROYECTOS: '/proyectos',
+  SETTINGS: '/ajustes',
+  LOGOUT: '/logout',
+  ACTIVITIES: '/actividades',
+  AUDITORY: '/auditoria',
+  STATS: '/estadisticas',
+  
 };
 
 export default ROUTES;

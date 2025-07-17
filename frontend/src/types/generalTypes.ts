@@ -1,14 +1,20 @@
 import { z } from "zod";
 
-export interface User {
-  id?: number;
-  email?: string;
-  username?: string;
-  first_name?: string;
-  last_name?: string;
-  nom_unidad?: string;
-  role?: string;
-}
+export const UserSchema = z.object({
+  id: z.number(),
+  email: z.string(),
+  username: z.string(),
+  first_name: z.string(),
+  last_name: z.string(),
+  nom_unidad: z.string().nullable(),
+  nom_gerencia_general: z.string().nullable(),
+  nom_coordinacion: z.string().nullable(),
+  nom_departamento: z.string().nullable(),
+  p00: z.string().nullable(),
+
+});
+
+export type UserType = z.infer<typeof UserSchema>;
 
 // Enum de estados según TextChoices de Django
 const EstadoProyecto = z.enum([
@@ -48,10 +54,19 @@ export const ProyectoSchema = z.object({
   }),
 
   // Asumimos que tu API serializa el FK "lider" como un integer ID
-  lider: z.number(),
+  lider: UserSchema,
 
   codigo: z.string().min(1, { message: "El código es obligatorio" }),
+  tareas_completadas: z.number(),
+  tareas_total: z.number(),
+  tareas_pendientes: z.number(),
+  miembros_total: z.number(),
 });
 
 // Tipo TS inferido automáticamente
 export type ProyectoType = z.infer<typeof ProyectoSchema>;
+
+
+export const UnidadSchema = z.object(z. any());
+
+export type UnidadType = z.infer<typeof UnidadSchema>;
