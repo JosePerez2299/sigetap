@@ -4,4 +4,5 @@ export const urls = {
     logout: "/auth/logout/",
     refreshToken: "/auth/token/refresh/",
     proyectos: "/proyectos/",
+    user: "auth/user/",
 };

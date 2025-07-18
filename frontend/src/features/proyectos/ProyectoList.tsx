@@ -42,6 +42,7 @@ import {
 } from "@mui/icons-material";
 import { type ProyectoType } from "../../types/generalTypes";
 import ProyectoCard from "./ProyectoCard";
+import ProyectoListCard from "./ProyectoListCard";
 
 interface ProyectoListProps {
   proyectos: ProyectoType[];
@@ -57,7 +58,7 @@ const getEstadoColor = (estado: string) => {
   switch (estado.toLowerCase()) {
     case "planificado":
       return "info";
-    case "en progreso":
+    case "ejecucion":
       return "warning";
     case "completado":
       return "success";
@@ -154,15 +155,13 @@ const ProyectoList: React.FC<ProyectoListProps> = ({
           />
         )}
       </Box>
-
+      
+      <Box >
       {/* Grid de proyectos - más columnas para cards compactas */}
-      <Grid container spacing={2}>
-        {proyectos.map((proyecto) => (
-          <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }} key={proyecto.id}>
-            <ProyectoCard proyecto={proyecto} handleOpen={abrirDetalle} />
-          </Grid>
-        ))}
-      </Grid>
+      {proyectos.map((proyecto) => (
+        <ProyectoListCard proyecto={proyecto} handleOpen={abrirDetalle} />
+      ))}
+      </Box>
 
       {/* Modal de detalles */}
       <Dialog open={modalAbierto} onClose={cerrarModal} maxWidth="md" fullWidth>
@@ -324,3 +323,5 @@ const ProyectoList: React.FC<ProyectoListProps> = ({
 };
 
 export default ProyectoList;
+
+

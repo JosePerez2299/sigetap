@@ -1,4 +1,5 @@
-import { publicApi } from "../api/publicApi";
+import { publicApi } from '../api/publicApi';
+
 import {
   LoginResponseSchema,
   RefreshTokenSchema,
@@ -19,6 +20,7 @@ const refreshToken = async (refreshToken: string): Promise<RefreshTokenType> => 
   });
   return RefreshTokenSchema.parse(response.data);
 };
+
 
 export const authServices = {
   login,

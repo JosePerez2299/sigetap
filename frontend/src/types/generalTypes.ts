@@ -11,7 +11,6 @@ export const UserSchema = z.object({
   nom_coordinacion: z.string().nullable(),
   nom_departamento: z.string().nullable(),
   p00: z.string().nullable(),
-
 });
 
 export type UserType = z.infer<typeof UserSchema>;
@@ -19,10 +18,13 @@ export type UserType = z.infer<typeof UserSchema>;
 // Enum de estados según TextChoices de Django
 const EstadoProyecto = z.enum([
   "Planificado",
-  "Ejecución",
+  "Ejecucion", 
   "Pausado",
-  "Finalizado",
+  "Finalizado"
 ] as const);
+
+export type EstadoProyectoType = z.infer<typeof EstadoProyecto>;
+export const EstadoProyectoEnum = EstadoProyecto.enum;
 
 // Esquema principal
 export const ProyectoSchema = z.object({
@@ -66,7 +68,13 @@ export const ProyectoSchema = z.object({
 // Tipo TS inferido automáticamente
 export type ProyectoType = z.infer<typeof ProyectoSchema>;
 
-
-export const UnidadSchema = z.object(z. any());
+// Esquema para Unidad (corregido)
+export const UnidadSchema = z.object({
+  id: z.number(),
+  nombre: z.string(),
+  codigo: z.string(),
+  proyectos_total: z.number(),
+  miembros_total: z.number(),
+});
 
 export type UnidadType = z.infer<typeof UnidadSchema>;
