@@ -72,9 +72,13 @@ const ProyectoList = ({ proyecto, handleOpen }: { proyecto: ProyectoType, handle
               </Tooltip>
               <Chip
                 label={proyecto.estado}
-                color={getEstadoColor(proyecto.estado) as any}
+                sx={{
+                  backgroundColor: getEstadoColor(proyecto.estado),
+                  color: "white",
+                  fontSize: "0.7rem",
+                  height: 20,
+                }}
                 size="small"
-                sx={{ fontSize: "0.7rem", height: 20 }}
               />
             </Box>
             <Typography

@@ -43,6 +43,13 @@ interface ProyectoHeaderProps {
   filtroEstado: string;
   ordenarPor: string;
   searchTerm: string;
+  estadisticas: {
+    total: number;
+    planificado: number;
+    ejecucion: number;
+    pausado: number;
+    finalizado: number;
+  };
   onFiltroEstadoChange: (estado: string) => void;
   onOrdenarPorChange: (ordenar: string) => void;
   onSearchChange: (search: string) => void;
@@ -61,18 +68,13 @@ const unidadActual = {
   codigo: "SDS"
 };
 
-const estadisticasProyectos = {
-  total: 24,
-  planificado: 5,
-  ejecucion: 12,
-  pausado: 2,
-  finalizado: 5
-};
+
 
 const ProyectoHeader: React.FC<ProyectoHeaderProps> = ({
   filtroEstado,
   ordenarPor,
   searchTerm,
+  estadisticas,
   onFiltroEstadoChange,
   onOrdenarPorChange,
   onSearchChange,
@@ -80,11 +82,11 @@ const ProyectoHeader: React.FC<ProyectoHeaderProps> = ({
   const theme = useTheme();
 
   const estadoOptions = [
-    { value: 'todos', label: 'Todos los Estados', icon: <Dashboard />, count: estadisticasProyectos.total },
-    { value: EstadoProyectoEnum.Planificado, label: 'Planificado', icon: <Schedule />, count: estadisticasProyectos.planificado },
-    { value: EstadoProyectoEnum.Ejecucion, label: 'En Ejecución', icon: <PlayCircle />, count: estadisticasProyectos.ejecucion },
-    { value: EstadoProyectoEnum.Pausado, label: 'Pausado', icon: <PauseCircle />, count: estadisticasProyectos.pausado },
-    { value: EstadoProyectoEnum.Finalizado, label: 'Finalizado', icon: <CheckCircle />, count: estadisticasProyectos.finalizado },
+    { value: 'todos', label: 'Todos los Estados', icon: <Dashboard />, count: estadisticas.total },
+    { value: EstadoProyectoEnum.Planificado, label: 'Planificado', icon: <Schedule />, count: estadisticas.planificado },
+    { value: EstadoProyectoEnum.Ejecucion, label: 'En Ejecución', icon: <PlayCircle />, count: estadisticas.ejecucion },
+    { value: EstadoProyectoEnum.Pausado, label: 'Pausado', icon: <PauseCircle />, count: estadisticas.pausado },
+    { value: EstadoProyectoEnum.Finalizado, label: 'Finalizado', icon: <CheckCircle />, count: estadisticas.finalizado },
   ];
 
   const sortOptions = [
@@ -101,9 +103,7 @@ const ProyectoHeader: React.FC<ProyectoHeaderProps> = ({
     onSearchChange('');
   };
 
-  const conteoActual = filtroEstado === 'todos' 
-    ? estadisticasProyectos.total 
-    : estadoOptions.find(e => e.value === filtroEstado)?.count || 0;
+  const conteoActual = estadisticas.total;
 
   return (
     <Box sx={{ mb: 2 }}>

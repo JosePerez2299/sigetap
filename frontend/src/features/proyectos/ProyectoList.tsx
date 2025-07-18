@@ -43,6 +43,7 @@ import {
 import { type ProyectoType } from "../../types/generalTypes";
 import ProyectoCard from "./ProyectoCard";
 import ProyectoListCard from "./ProyectoListCard";
+import getEstadoColor from "../../utils/getProyectStateColor";
 
 interface ProyectoListProps {
   proyectos: ProyectoType[];
@@ -53,23 +54,6 @@ interface ProyectoListProps {
   onSearch?: (searchTerm: string) => void;
 }
 
-// Función para obtener el color del estado
-const getEstadoColor = (estado: string) => {
-  switch (estado.toLowerCase()) {
-    case "planificado":
-      return "info";
-    case "ejecucion":
-      return "warning";
-    case "completado":
-      return "success";
-    case "cancelado":
-      return "error";
-    default:
-      return "default";
-  }
-};
-
-// Función para formatear fechas de manera compacta
 const formatearFecha = (fecha: Date): string => {
   return fecha.toLocaleDateString("es-ES", {
     day: "2-digit",
@@ -86,7 +70,6 @@ const formatearFechaCompleta = (fecha: Date): string => {
   });
 };
 
-// Componente principal
 const ProyectoList: React.FC<ProyectoListProps> = ({
   proyectos,
   totalProyectos = 0,
@@ -118,7 +101,6 @@ const ProyectoList: React.FC<ProyectoListProps> = ({
     const value = event.target.value;
     setSearchTerm(value);
 
-    // Debounce simulado - en producción usar debounce real
     setTimeout(() => {
       console.log("Buscando:", value);
       onSearch?.(value);
@@ -137,7 +119,6 @@ const ProyectoList: React.FC<ProyectoListProps> = ({
 
   return (
     <Box sx={{ p: 2 }}>
-      {/* Información de resultados */}
       <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
         <Typography variant="body2" color="text.secondary">
           Mostrando {proyectos.length} de {totalProyectos} proyectos
@@ -180,7 +161,10 @@ const ProyectoList: React.FC<ProyectoListProps> = ({
                 </Typography>
                 <Chip
                   label={proyectoSeleccionado.estado}
-                  color={getEstadoColor(proyectoSeleccionado.estado) as any}
+                  sx ={{
+                    backgroundColor: getEstadoColor(proyectoSeleccionado.estado),
+                    color: "white",
+                  }}
                 />
               </Box>
             </DialogTitle>
@@ -198,7 +182,7 @@ const ProyectoList: React.FC<ProyectoListProps> = ({
                   <List dense>
                     <ListItem>
                       <ListItemIcon>
-                        <Code />
+                        <Code color="primary"/>
                       </ListItemIcon>
                       <ListItemText
                         primary="Código de proyecto"
@@ -207,7 +191,7 @@ const ProyectoList: React.FC<ProyectoListProps> = ({
                     </ListItem>
                     <ListItem>
                       <ListItemIcon>
-                        <CalendarToday />
+                        <CalendarToday color="success" />
                       </ListItemIcon>
                       <ListItemText
                         primary="Fecha de inicio"
@@ -218,7 +202,7 @@ const ProyectoList: React.FC<ProyectoListProps> = ({
                     </ListItem>
                     <ListItem>
                       <ListItemIcon>
-                        <CalendarToday />
+                        <CalendarToday color="error" />
                       </ListItemIcon>
                       <ListItemText
                         primary="Fecha de fin"
@@ -229,7 +213,7 @@ const ProyectoList: React.FC<ProyectoListProps> = ({
                     </ListItem>
                     <ListItem>
                       <ListItemIcon>
-                        <Business />
+                        <Business color="warning" />
                       </ListItemIcon>
                       <ListItemText
                         primary="Unidad responsable"
@@ -246,7 +230,7 @@ const ProyectoList: React.FC<ProyectoListProps> = ({
                   <List dense>
                     <ListItem>
                       <ListItemIcon>
-                        <Avatar sx={{ width: 32, height: 32 }}>
+                        <Avatar sx={{ width: 32, height: 32, backgroundColor: "primary.main" }}>
                           {proyectoSeleccionado.lider.username.charAt(0)}
                         </Avatar>
                       </ListItemIcon>
@@ -257,7 +241,7 @@ const ProyectoList: React.FC<ProyectoListProps> = ({
                     </ListItem>
                     <ListItem>
                       <ListItemIcon>
-                        <Group />
+                        <Group color="info"/>
                       </ListItemIcon>
                       <ListItemText
                         primary="Miembros del equipo"
@@ -266,7 +250,7 @@ const ProyectoList: React.FC<ProyectoListProps> = ({
                     </ListItem>
                     <ListItem>
                       <ListItemIcon>
-                        <CheckCircle />
+                        <CheckCircle color="success" />
                       </ListItemIcon>
                       <ListItemText
                         primary="Tareas completadas"
@@ -275,7 +259,7 @@ const ProyectoList: React.FC<ProyectoListProps> = ({
                     </ListItem>
                     <ListItem>
                       <ListItemIcon>
-                        <PendingActions />
+                        <PendingActions color="error" />
                       </ListItemIcon>
                       <ListItemText
                         primary="Tareas pendientes"

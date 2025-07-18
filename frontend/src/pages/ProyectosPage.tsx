@@ -1,29 +1,11 @@
 import {
-  AppBar,
-  Avatar,
-  Box,
-  Button,
-  Card,
-  Chip,
-  Divider,
-  InputAdornment,
-  LinearProgress,
-  List,
-  ListItem,
-  ListItemAvatar,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
+
   Paper,
-  TextField,
-  Toolbar,
-  Typography,
+
 } from "@mui/material";
 import { type ProyectoType, type UserType, EstadoProyectoEnum } from "../types/generalTypes";
 import { ProyectoList, UnidadList } from "../features/proyectos";
-import { Search } from "@mui/icons-material";
 import { useState } from "react";
-import React from "react";
 import ProyectoHeader from "../features/proyectos/ProyectosHeader";
 
 const lider: UserType = {
@@ -40,6 +22,7 @@ const lider: UserType = {
 };
 
 const proyectos: ProyectoType[] = [
+  
   {
     id: 0,
     nombre: "Proyecto 1",
@@ -102,6 +85,18 @@ const proyectos: ProyectoType[] = [
   },
 ];
 
+const proyectosResponse = {
+
+  proyectos: proyectos,
+   estadisticas: {
+    total: proyectos.length,
+    planificado: 5,
+    ejecucion: 12,
+    pausado: 2,
+    finalizado: 5
+  },
+  
+}
 const unidades: any = [
   {
     id: 1,
@@ -199,6 +194,7 @@ const ProyectosPage = () => {
         filtroEstado={filtroEstado}
         ordenarPor={ordenarPor}
         searchTerm={searchTermHeader}
+        estadisticas={proyectosResponse.estadisticas}
         onFiltroEstadoChange={handleFiltroEstadoChange}
         onOrdenarPorChange={handleOrdenarPorChange}
         onSearchChange={handleSearchChangeHeader}
@@ -207,7 +203,7 @@ const ProyectosPage = () => {
       <Paper elevation={3}>
         <ProyectoList
           proyectos={sortedProyectos}
-          totalProyectos={filteredProyectos.length}
+          totalProyectos={filteredProyectos.length + 100}
           currentPage={currentPage}
           pageSize={pageSize}
           onPageChange={handlePageChange}
@@ -216,6 +212,7 @@ const ProyectosPage = () => {
       </Paper>
 
       {/* TODO: Seccion de unidades, tambien un header con el buscador por titulo. Seran cards las unidades */}
+      <UnidadList unidades={unidades} currentPage={currentPage} totalPages={100} totalItems={100} itemsPerPage={12} onPageChange={handlePageChange} />
     </div>
   );
 };
