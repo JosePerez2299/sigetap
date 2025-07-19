@@ -3,3 +3,4 @@ djangorestframework==3.16.0
 drf-spectacular
 django-cors-headers
 djangorestframework_simplejwt
+dj-rest-auth

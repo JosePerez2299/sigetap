@@ -6,11 +6,11 @@ export const UserSchema = z.object({
   username: z.string(),
   first_name: z.string(),
   last_name: z.string(),
-  nom_unidad: z.string().nullable(),
-  nom_gerencia_general: z.string().nullable(),
-  nom_coordinacion: z.string().nullable(),
-  nom_departamento: z.string().nullable(),
-  p00: z.string().nullable(),
+  nom_unidad: z.string().optional(),
+  nom_gerencia_general: z.string().optional(),
+  nom_coordinacion: z.string().optional(),
+  nom_departamento: z.string().optional(),
+  p00: z.string().optional(),
 });
 
 export type UserType = z.infer<typeof UserSchema>;
