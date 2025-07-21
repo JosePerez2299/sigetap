@@ -10,10 +10,10 @@ import {
   Stack,
   Divider,
 } from "@mui/material";
-import { type ProyectoType } from "../../types/generalTypes";
+import { type ProyectoType } from "../types/generalTypes";
 import { Business, Group, Info, Person, Today, ArrowForwardIos } from "@mui/icons-material";
-import utils from "../../utils";
-import getEstadoColor from "../../utils/getProyectStateColor";
+import utils from "../utils";
+import getEstadoColor from "../utils/getProyectStateColor";
 
 const ProyectoList = ({ proyecto, handleOpen }: { proyecto: ProyectoType, handleOpen: (proyecto: ProyectoType) => void }) => {
  

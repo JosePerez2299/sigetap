@@ -35,8 +35,8 @@ import {
   Clear,
 } from '@mui/icons-material';
 
-import { EstadoProyectoEnum } from '../../types/generalTypes';
-import getEstadoColor from '../../utils/getProyectStateColor';
+import { EstadoProyectoEnum } from '../types/generalTypes';
+import getEstadoColor from '../utils/getProyectStateColor';
 
 // Tipos para las props
 interface ProyectoHeaderProps {

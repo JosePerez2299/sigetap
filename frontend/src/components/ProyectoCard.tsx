@@ -10,7 +10,7 @@ import {
   Button,
   LinearProgress,
 } from "@mui/material";
-import { type ProyectoType } from "../../types/generalTypes";
+import { type ProyectoType } from "../types/generalTypes";
 import { Business, Group, Info, Person, Today } from "@mui/icons-material";
 
 const ProyectoCard = ({ proyecto, handleOpen }: { proyecto: ProyectoType, handleOpen: (proyecto: ProyectoType) => void }) => {

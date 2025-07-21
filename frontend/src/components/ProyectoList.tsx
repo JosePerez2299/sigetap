@@ -1,10 +1,6 @@
 import React, { useState } from "react";
 import {
-  Card,
-  CardContent,
-  CardActions,
   Typography,
-  Button,
   Grid,
   Box,
   Chip,
@@ -19,48 +15,32 @@ import {
   ListItem,
   ListItemText,
   ListItemIcon,
-  TextField,
-  InputAdornment,
   Pagination,
-  Stack,
-  IconButton,
-  Tooltip,
-  Toolbar,
-  AppBar,
+  Button,
+  Paper,
+  CircularProgress,
 } from "@mui/material";
 import {
   CalendarToday,
-  Person,
   Business,
   Code,
   CheckCircle,
   PendingActions,
   Group,
-  Info,
-  Search,
-  Today,
 } from "@mui/icons-material";
-import { type ProyectoType } from "../../types/generalTypes";
-import ProyectoCard from "./ProyectoCard";
+import { type ProyectoType } from "../types/generalTypes";
+import getEstadoColor from "../utils/getProyectStateColor";
 import ProyectoListCard from "./ProyectoListCard";
-import getEstadoColor from "../../utils/getProyectStateColor";
 
 interface ProyectoListProps {
+  loading: boolean;
   proyectos: ProyectoType[];
-  totalProyectos?: number;
-  currentPage?: number;
-  pageSize?: number;
+  totalProyectos: number;
+  currentPage: number;
+  pageSize: number;
   onPageChange?: (page: number) => void;
   onSearch?: (searchTerm: string) => void;
 }
-
-const formatearFecha = (fecha: Date): string => {
-  return fecha.toLocaleDateString("es-ES", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-  });
-};
 
 const formatearFechaCompleta = (fecha: Date): string => {
   return fecha.toLocaleDateString("es-ES", {
@@ -71,10 +51,11 @@ const formatearFechaCompleta = (fecha: Date): string => {
 };
 
 const ProyectoList: React.FC<ProyectoListProps> = ({
+  loading,
   proyectos,
   totalProyectos = 0,
   currentPage = 1,
-  pageSize = 12,
+  pageSize,
   onPageChange,
   onSearch,
 }) => {
@@ -116,12 +97,15 @@ const ProyectoList: React.FC<ProyectoListProps> = ({
   };
 
   const totalPages = Math.ceil(totalProyectos / pageSize);
+  console.log("Total de páginas:", totalPages);
+  console.log("Total de proyectos:", totalProyectos);
+  console.log("pageSize page:", pageSize);
 
   return (
     <Box sx={{ p: 2 }}>
       <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
         <Typography variant="body2" color="text.secondary">
-          Mostrando {proyectos.length} de {totalProyectos} proyectos
+          Mostrando {currentPage*pageSize} de {totalProyectos} proyectos
         </Typography>
 
         {/* Paginación */}
@@ -136,12 +120,32 @@ const ProyectoList: React.FC<ProyectoListProps> = ({
           />
         )}
       </Box>
-      
-      <Box >
-      {/* Grid de proyectos - más columnas para cards compactas */}
-      {proyectos.map((proyecto) => (
-        <ProyectoListCard proyecto={proyecto} handleOpen={abrirDetalle} />
-      ))}
+
+      <Box>
+        {loading ? (
+          <CircularProgress />
+        ) : proyectos.length === 0 ? (
+          <Paper
+            sx={{
+              p: 6,
+              textAlign: "center",
+              bgcolor: "grey.50",
+              border: "2px dashed",
+              borderColor: "grey.300",
+            }}
+          >
+            <Typography variant="h6" color="text.secondary" sx={{ mb: 1 }}>
+              No hay proyectos disponibles
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              No se encontraron proyectos para mostrar
+            </Typography>
+          </Paper>
+        ) : (
+          proyectos.map((proyecto) => (
+            <ProyectoListCard proyecto={proyecto} handleOpen={abrirDetalle} />
+          ))
+        )}
       </Box>
 
       {/* Modal de detalles */}
@@ -161,8 +165,10 @@ const ProyectoList: React.FC<ProyectoListProps> = ({
                 </Typography>
                 <Chip
                   label={proyectoSeleccionado.estado}
-                  sx ={{
-                    backgroundColor: getEstadoColor(proyectoSeleccionado.estado),
+                  sx={{
+                    backgroundColor: getEstadoColor(
+                      proyectoSeleccionado.estado
+                    ),
                     color: "white",
                   }}
                 />
@@ -182,7 +188,7 @@ const ProyectoList: React.FC<ProyectoListProps> = ({
                   <List dense>
                     <ListItem>
                       <ListItemIcon>
-                        <Code color="primary"/>
+                        <Code color="primary" />
                       </ListItemIcon>
                       <ListItemText
                         primary="Código de proyecto"
@@ -230,7 +236,13 @@ const ProyectoList: React.FC<ProyectoListProps> = ({
                   <List dense>
                     <ListItem>
                       <ListItemIcon>
-                        <Avatar sx={{ width: 32, height: 32, backgroundColor: "primary.main" }}>
+                        <Avatar
+                          sx={{
+                            width: 32,
+                            height: 32,
+                            backgroundColor: "primary.main",
+                          }}
+                        >
                           {proyectoSeleccionado.lider.username.charAt(0)}
                         </Avatar>
                       </ListItemIcon>
@@ -241,7 +253,7 @@ const ProyectoList: React.FC<ProyectoListProps> = ({
                     </ListItem>
                     <ListItem>
                       <ListItemIcon>
-                        <Group color="info"/>
+                        <Group color="info" />
                       </ListItemIcon>
                       <ListItemText
                         primary="Miembros del equipo"
@@ -307,5 +319,3 @@ const ProyectoList: React.FC<ProyectoListProps> = ({
 };
 
 export default ProyectoList;
-
-

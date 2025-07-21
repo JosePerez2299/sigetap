@@ -35,19 +35,9 @@ export const ProyectoSchema = z.object({
 
   descripcion: z.string().min(1, { message: "La descripción es obligatoria" }),
 
-  fecha_inicio: z
-    .string()
-    .refine((str) => !isNaN(Date.parse(str)), {
-      message: "fecha_inicio debe ser una fecha ISO válida",
-    })
-    .transform((str) => new Date(str)),
+  fecha_inicio: z.date(),
 
-  fecha_fin: z
-    .string()
-    .refine((str) => !isNaN(Date.parse(str)), {
-      message: "fecha_fin debe ser una fecha ISO válida",
-    })
-    .transform((str) => new Date(str)),
+  fecha_fin: z.date(),
 
   estado: EstadoProyecto,
 
@@ -78,3 +68,29 @@ export const UnidadSchema = z.object({
 });
 
 export type UnidadType = z.infer<typeof UnidadSchema>;
+
+export const UnidadSchemaResponse = z.object({
+  unidades: UnidadSchema.array(),
+  totalItems: z.number(),
+  currentPage: z.number(),
+  pageSize: z.number(),
+});
+
+export type UnidadTypeResponse = z.infer<typeof UnidadSchemaResponse>;
+
+
+export const ProyectoSchemaResponse = z.object({
+    proyectos: ProyectoSchema.array(),
+    totalItems: z.number(),
+    currentPage: z.number(),
+    pageSize: z.number(),
+    estadisticas: z.object({
+        total: z.number(),
+        planificado: z.number(),
+        ejecucion: z.number(),
+        pausado: z.number(),
+        finalizado: z.number(),
+    }),
+});
+
+export type ProyectoTypeResponse = z.infer<typeof ProyectoSchemaResponse>;

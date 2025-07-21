@@ -1,4 +1,4 @@
-import ProyectoList from "./ProyectoList";
-import UnidadList from "./UnidadList";
+import ProyectoList from "../../components/ProyectoList";
+import UnidadList from "../../components/UnidadList";
 
 export { ProyectoList, UnidadList };
