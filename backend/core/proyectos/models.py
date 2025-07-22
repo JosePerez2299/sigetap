@@ -4,7 +4,7 @@ from django.db import models
 class Proyecto(models.Model):
     class Estado(models.TextChoices):
         PLANIFICADO = 'Planificado'
-        EJECUCION = 'Ejecución'
+        EJECUCION = 'Ejecucion'
         PAUSADO = 'Pausado'
         FINALIZADO = 'Finalizado'
 

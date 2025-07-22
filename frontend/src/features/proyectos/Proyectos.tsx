@@ -26,16 +26,23 @@ const Proyectos = () => {
   const {
     proyectos,
     totalItems,
-    pageSize,
     loading,
     estadisticas,
     error,
     filters,
     setFilters,
-  } = useProyectos();
+  } = useProyectos({
+    page: 2,
+    pageSize: 4,
+    sortBy: "nombre",
+    filterBy: "todos",
+    searchTerm: "",
+  });
 
   const [debouncedSearchTerm, cancelSearchTerm] = useDebounce(
     (searchTerm: string) => {
+    setFilters({ ...filters, page: 1 });
+
       setFilters({ ...filters, searchTerm }); // Resetear a la primera página cuando se cambia la búsqueda
     },
     1000
@@ -84,7 +91,7 @@ const Proyectos = () => {
             proyectos={proyectos}
             totalProyectos={totalItems}
             currentPage={filters.page}
-            pageSize={pageSize}
+            pageSize={filters.pageSize}
             onPageChange={handlePageChange}
             loading={loading}
           />

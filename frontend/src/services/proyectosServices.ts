@@ -10,13 +10,19 @@ import {
 } from "../types/generalTypes";
 import { type EstadoProyectoType } from "../types/generalTypes";
 
-const getAll = async (
-  page: number = 1,
-  pageSize: number = 4,
-  sortBy: string = "nombre",
-  filterBy: EstadoProyectoType | "todos" = "todos",
-  searchTerm: string = ""
-): Promise<ProyectoTypeResponse> => {
+const getAll = async ({
+  page,
+  pageSize,
+  sortBy,
+  filterBy,
+  searchTerm,
+}: {
+  page: number;
+  pageSize: number;
+  sortBy: string;
+  filterBy: EstadoProyectoType | "todos" | "";
+  searchTerm: string;
+}): Promise<ProyectoTypeResponse> => {
   console.log(
     "getAll",
     "page:",
@@ -30,7 +36,24 @@ const getAll = async (
     "searchTerm:",
     searchTerm
   );
-  // const {data}: {data: ProyectoType[]} = await privateApi.get(urls.proyectos);
+
+  if (filterBy === "todos") {
+    filterBy = "";
+  }
+
+  const response = await privateApi.get(urls.proyectos, {
+    params: {
+      page,
+      page_size: pageSize,
+      ordering: sortBy,
+      estado: filterBy,
+      search: searchTerm,
+    },
+  });
+
+  console.log(response.data);
+
+  return response.data;
   const lider = {
     id: 1,
     email: "lider1@example.com",

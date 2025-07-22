@@ -31,6 +31,7 @@ import {
 import { type ProyectoType } from "../types/generalTypes";
 import getEstadoColor from "../utils/getProyectStateColor";
 import ProyectoListCard from "./ProyectoListCard";
+import { formatDate } from "../utils/formatDate";
 
 interface ProyectoListProps {
   loading: boolean;
@@ -42,13 +43,7 @@ interface ProyectoListProps {
   onSearch?: (searchTerm: string) => void;
 }
 
-const formatearFechaCompleta = (fecha: Date): string => {
-  return fecha.toLocaleDateString("es-ES", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
-};
+
 
 const ProyectoList: React.FC<ProyectoListProps> = ({
   loading,
@@ -127,7 +122,7 @@ const ProyectoList: React.FC<ProyectoListProps> = ({
           </Paper>
         ) : (
           proyectos.map((proyecto) => (
-            <ProyectoListCard proyecto={proyecto} handleOpen={abrirDetalle} />
+            <ProyectoListCard key={proyecto.id} proyecto={proyecto} handleOpen={abrirDetalle} />
           ))
         )}
       </Box>
@@ -185,7 +180,7 @@ const ProyectoList: React.FC<ProyectoListProps> = ({
                       </ListItemIcon>
                       <ListItemText
                         primary="Fecha de inicio"
-                        secondary={formatearFechaCompleta(
+                        secondary={formatDate(
                           proyectoSeleccionado.fecha_inicio
                         )}
                       />
@@ -196,7 +191,7 @@ const ProyectoList: React.FC<ProyectoListProps> = ({
                       </ListItemIcon>
                       <ListItemText
                         primary="Fecha de fin"
-                        secondary={formatearFechaCompleta(
+                        secondary={formatDate(
                           proyectoSeleccionado.fecha_fin
                         )}
                       />
@@ -268,7 +263,7 @@ const ProyectoList: React.FC<ProyectoListProps> = ({
 
               <Divider sx={{ my: 3 }} />
 
-              <Box>
+              {/* <Box>
                 <Typography variant="h6" gutterBottom>
                   Progreso del proyecto
                 </Typography>
@@ -289,7 +284,7 @@ const ProyectoList: React.FC<ProyectoListProps> = ({
                   )}
                   % completado
                 </Typography>
-              </Box>
+              </Box> */}
             </DialogContent>
 
             <DialogActions>

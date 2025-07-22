@@ -5,6 +5,7 @@ from .models import Proyecto
 
 User = get_user_model()
 
+
 class ProyectoSerializer(serializers.ModelSerializer):
     lider = UserSerializer(read_only=True)
     lider_id = serializers.PrimaryKeyRelatedField(
@@ -24,3 +25,11 @@ class ProyectoSerializer(serializers.ModelSerializer):
             'lider',
             'lider_id',
         ]
+
+class ProyectoPaginatedResponseSerializer(serializers.Serializer):
+    """Serializer para documentar la respuesta paginada de Proyecto"""
+    count = serializers.IntegerField(help_text="Total de elementos")
+    total_pages = serializers.IntegerField(help_text="Total de páginas")
+    current_page = serializers.IntegerField(help_text="Página actual")
+    page_size = serializers.IntegerField(help_text="Elementos por página")
+    data = ProyectoSerializer(many=True, help_text="Lista de proyectos")

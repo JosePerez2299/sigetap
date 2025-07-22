@@ -14,22 +14,16 @@ import { type ProyectoType } from "../types/generalTypes";
 import { Business, Group, Info, Person, Today, ArrowForwardIos } from "@mui/icons-material";
 import utils from "../utils";
 import getEstadoColor from "../utils/getProyectStateColor";
+import { formatDate } from "../utils/formatDate";
 
 const ProyectoList = ({ proyecto, handleOpen }: { proyecto: ProyectoType, handleOpen: (proyecto: ProyectoType) => void }) => {
  
 
 
 
-  const formatearFecha = (fecha: Date): string => {
-    return fecha.toLocaleDateString("es-ES", {
-      day: "2-digit",
-      month: "2-digit",
-      year: "numeric",
-    });
-  };
 
-  const progreso = utils.calculateProgress(proyecto.tareas_completadas, proyecto.tareas_total);
-
+  // const progreso = utils.calculateProgress(proyecto.tareas_completadas, proyecto.tareas_total);
+  const progreso = 50;
   return (
     <Paper
       elevation={0}
@@ -151,7 +145,7 @@ const ProyectoList = ({ proyecto, handleOpen }: { proyecto: ProyectoType, handle
                   Fecha fin
                 </Typography>
                 <Typography variant="body2" sx={{ fontSize: "0.8rem", fontWeight: 500 }}>
-                  {formatearFecha(proyecto.fecha_fin)}
+                  {formatDate(proyecto.fecha_fin)}
                 </Typography>
               </Box>
             </Box>

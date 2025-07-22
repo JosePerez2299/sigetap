@@ -13,19 +13,30 @@ interface Filters {
 }
 
 // Custom hook para proyectos filtrados
-export const useProyectos = () => {
+export const useProyectos = ({
+  page,
+  pageSize,
+  sortBy,
+  filterBy,
+  searchTerm,
+}: {
+  page: number;
+  pageSize: number;
+  sortBy: string;
+  filterBy: EstadoProyectoType | "todos";
+  searchTerm: string;
+}) => {
   const [filters, setFilters] = useState<Filters>({
-    page: 1,
-    pageSize: 4,
-    sortBy: "nombre",
-    filterBy: "todos",
-    searchTerm: "",
-    currentPage: 1,
+    page: page,
+    pageSize: pageSize,
+    sortBy: sortBy,
+    filterBy: filterBy,
+    searchTerm: searchTerm,
+    currentPage: page,
   });
 
   const [proyectos, setProyectos] = useState<ProyectoType[]>([]);
   const [totalItems, setTotalItems] = useState(0);
-  const [pageSize, setPageSize] = useState(4);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [estadisticas, setEstadisticas] = useState({
@@ -38,17 +49,15 @@ export const useProyectos = () => {
   const fetchProyectos = async () => {
     try {
       setLoading(true);
-      const result = await proyectosServices.getAll(
-        filters.page,
-        filters.pageSize,
-        filters.sortBy,
-        filters.filterBy,
-        filters.searchTerm
-      );
-      setProyectos(result.proyectos);
-      setTotalItems(result.totalItems);
-      setPageSize(result.pageSize);
-      setEstadisticas(result.estadisticas);
+      const result = await proyectosServices.getAll({
+        page: filters.page,
+        pageSize: filters.pageSize,
+        sortBy: filters.sortBy,
+        filterBy: filters.filterBy,
+        searchTerm: filters.searchTerm,
+      });
+      setProyectos(result.data);
+      setTotalItems(result.count);
     } catch (error) {
       console.log(error);
       setError(handleErrorMessage(error));
@@ -58,11 +67,16 @@ export const useProyectos = () => {
   };
   useEffect(() => {
     fetchProyectos();
-  }, [filters]);
+  }, [
+    filters.page,
+    filters.pageSize,
+    filters.sortBy,
+    filters.filterBy,
+    filters.searchTerm,
+  ]);
   return {
     proyectos,
     totalItems,
-    pageSize,
     estadisticas,
     loading,
     error,

@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'dj_rest_auth',
+    'django_filters',
 
     # Applications
     'core.users',
@@ -60,7 +61,11 @@ INSTALLED_APPS = [
 
 
 SPECTACULAR_SETTINGS = {
- 
+    'TITLE': 'Tu API',
+    'DESCRIPTION': 'Descripción de tu API',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
+    'COMPONENT_SPLIT_REQUEST': True,
     'TAGS': [
         {'name': 'Proyectos', 'description': 'Gestión de proyectos'},
     ],
@@ -72,7 +77,25 @@ SPECTACULAR_SETTINGS = {
     'TAGS_BY_PATH_PREFIX': {
         '/api/proyectos/': 'Proyectos',
     },
+
+
+
+    # Configuración para paginación personalizada
+    'PAGINATION_SCHEMA': {
+        'type': 'object',
+        'properties': {
+            'count': {'type': 'integer'},
+            'total_pages': {'type': 'integer'},
+            'current_page': {'type': 'integer'},
+            'page_size': {'type': 'integer'},
+            'data': {
+                'type': 'array',
+                'items': {}  # Se llena automáticamente
+            }
+        }
+    }
 }
+
 
 
 MIDDLEWARE = [
@@ -199,12 +222,20 @@ REST_FRAMEWORK = {
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 20,
+    'DEFAULT_FILTER_BACKENDS': [
+        'django_filters.rest_framework.DjangoFilterBackend',
+        'rest_framework.filters.SearchFilter',
+        'rest_framework.filters.OrderingFilter',
+    ],
 }
 
 # djangorestframework-simplejwt
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(seconds=30),
-    "REFRESH_TOKEN_LIFETIME": timedelta(minutes=15),
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=15),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
 }
 
 # dj-rest-auth

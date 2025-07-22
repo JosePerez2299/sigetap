@@ -49,10 +49,10 @@ export const ProyectoSchema = z.object({
   lider: UserSchema,
 
   codigo: z.string().min(1, { message: "El código es obligatorio" }),
-  tareas_completadas: z.number(),
-  tareas_total: z.number(),
-  tareas_pendientes: z.number(),
-  miembros_total: z.number(),
+  tareas_completadas: z.number().optional(),
+  tareas_total: z.number().optional(),
+  tareas_pendientes: z.number().optional(),
+  miembros_total: z.number().optional(),
 });
 
 // Tipo TS inferido automáticamente
@@ -80,17 +80,10 @@ export type UnidadTypeResponse = z.infer<typeof UnidadSchemaResponse>;
 
 
 export const ProyectoSchemaResponse = z.object({
-    proyectos: ProyectoSchema.array(),
-    totalItems: z.number(),
+    data: ProyectoSchema.array(),
+    count: z.number(),
     currentPage: z.number(),
     pageSize: z.number(),
-    estadisticas: z.object({
-        total: z.number(),
-        planificado: z.number(),
-        ejecucion: z.number(),
-        pausado: z.number(),
-        finalizado: z.number(),
-    }),
 });
 
 export type ProyectoTypeResponse = z.infer<typeof ProyectoSchemaResponse>;
