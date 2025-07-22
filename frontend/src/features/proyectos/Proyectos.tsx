@@ -6,6 +6,7 @@ import {
   Typography,
 } from "@mui/material";
 import {
+  type EstadoProyectoType,
   type ProyectoType,
   type UserType,
   EstadoProyectoEnum,
@@ -18,6 +19,7 @@ import { getAllProyectosThunk } from "../../store/proyectos/proyectosThunks";
 import type { AppDispatch } from "../../store/RootState";
 import { useProyectos } from "../../hooks/useProyectos";
 import LoadingOverlay from "../../components/Loading";
+import { useDebounce } from "../../hooks/useDebounce";
 
 const Proyectos = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -25,90 +27,44 @@ const Proyectos = () => {
     proyectos,
     totalItems,
     pageSize,
-    currentPage,
     loading,
-    setCurrentPage,
     estadisticas,
     error,
+    filters,
+    setFilters,
   } = useProyectos();
 
-  const [searchTerm, setSearchTerm] = useState("");
+  const [debouncedSearchTerm, cancelSearchTerm] = useDebounce(
+    (searchTerm: string) => {
+      setFilters({ ...filters, searchTerm }); // Resetear a la primera página cuando se cambia la búsqueda
+    },
+    1000
+  );
 
   const [filtroEstado, setFiltroEstado] = useState("todos");
   const [ordenarPor, setOrdenarPor] = useState("nombre");
   const [searchTermHeader, setSearchTermHeader] = useState("");
 
   const handlePageChange = (page: number) => {
-    console.log("Cambiando a página:", page);
-    setCurrentPage(page);
-    console.log("currentPage de proyectos:", currentPage);
-  };
-
-  const handleSearch = (term: string) => {
-    console.log("Buscando:", term);
-    setSearchTerm(term);
+    setFilters({ ...filters, page });
   };
 
   // Handlers para el header
-  const handleFiltroEstadoChange = (estado: string) => {
-    console.log("Cambiando filtro estado:", estado);
+  const handleFiltroEstadoChange = (estado: EstadoProyectoType| "todos") => {
     setFiltroEstado(estado);
-    setCurrentPage(0); // Resetear a la primera página cuando se cambia el filtro
+    setFilters({ ...filters, filterBy: estado }); // Resetear a la primera página cuando se cambia el filtro
   };
 
   const handleOrdenarPorChange = (ordenar: string) => {
-    console.log("Cambiando ordenar por:", ordenar);
     setOrdenarPor(ordenar);
+    setFilters({ ...filters, sortBy: ordenar }); // Resetear a la primera página cuando se cambia el ordenamiento
   };
 
   const handleSearchChangeHeader = (search: string) => {
-    console.log("Cambiando búsqueda header:", search);
     setSearchTermHeader(search);
-    setCurrentPage(0); // Resetear a la primera página cuando se cambia la búsqueda
+    debouncedSearchTerm(search);
   };
-
-  // Aquí puedes agregar la lógica para filtrar y ordenar los proyectos
-  const filteredProyectos = proyectos.filter((proyecto) => {
-    const matchesSearch =
-      searchTermHeader === "" ||
-      proyecto.nombre.toLowerCase().includes(searchTermHeader.toLowerCase()) ||
-      proyecto.codigo.toLowerCase().includes(searchTermHeader.toLowerCase()) ||
-      proyecto.lider.first_name
-        .toLowerCase()
-        .includes(searchTermHeader.toLowerCase()) ||
-      proyecto.lider.last_name
-        .toLowerCase()
-        .includes(searchTermHeader.toLowerCase());
-
-    const matchesEstado =
-      filtroEstado === "todos" || proyecto.estado === filtroEstado;
-
-    return matchesSearch && matchesEstado;
-  });
-
-  // Lógica de ordenamiento
-  const sortedProyectos = [...filteredProyectos].sort((a, b) => {
-    switch (ordenarPor) {
-      case "nombre":
-        return a.nombre.localeCompare(b.nombre);
-      case "fecha_inicio":
-        return a.fecha_inicio.getTime() - b.fecha_inicio.getTime();
-      case "fecha_fin":
-        return a.fecha_fin.getTime() - b.fecha_fin.getTime();
-      case "estado":
-        return a.estado.localeCompare(b.estado);
-      case "lider":
-        return `${a.lider.first_name} ${a.lider.last_name}`.localeCompare(
-          `${b.lider.first_name} ${b.lider.last_name}`
-        );
-      case "progreso":
-        const progressA = (a.tareas_completadas / a.tareas_total) * 100;
-        const progressB = (b.tareas_completadas / b.tareas_total) * 100;
-        return progressB - progressA; // Descendente
-      default:
-        return 0;
-    }
-  });
+ 
 
   return (
     <>
@@ -125,12 +81,11 @@ const Proyectos = () => {
       />
         <Paper elevation={3}>
           <ProyectoList
-            proyectos={sortedProyectos}
+            proyectos={proyectos}
             totalProyectos={totalItems}
-            currentPage={currentPage}
+            currentPage={filters.page}
             pageSize={pageSize}
             onPageChange={handlePageChange}
-            onSearch={handleSearch}
             loading={loading}
           />
         </Paper>

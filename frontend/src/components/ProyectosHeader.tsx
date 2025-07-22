@@ -35,7 +35,7 @@ import {
   Clear,
 } from '@mui/icons-material';
 
-import { EstadoProyectoEnum } from '../types/generalTypes';
+import {EstadoProyectoEnum, type EstadoProyectoType } from '../types/generalTypes';
 import getEstadoColor from '../utils/getProyectStateColor';
 
 // Tipos para las props
@@ -50,7 +50,7 @@ interface ProyectoHeaderProps {
     pausado: number;
     finalizado: number;
   };
-  onFiltroEstadoChange: (estado: string) => void;
+  onFiltroEstadoChange: (estado: EstadoProyectoType| "todos") => void;
   onOrdenarPorChange: (ordenar: string) => void;
   onSearchChange: (search: string) => void;
 }
@@ -305,7 +305,7 @@ const ProyectoHeader: React.FC<ProyectoHeaderProps> = ({
               <Select
                 labelId="filtro-estado-label"
                 value={filtroEstado}
-                onChange={(e) => onFiltroEstadoChange(e.target.value)}
+                onChange={(e) => onFiltroEstadoChange(e.target.value as EstadoProyectoType)}
                 label="Estado"
                 MenuProps={{
                   PaperProps: {

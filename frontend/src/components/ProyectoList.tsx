@@ -57,12 +57,10 @@ const ProyectoList: React.FC<ProyectoListProps> = ({
   currentPage = 1,
   pageSize,
   onPageChange,
-  onSearch,
 }) => {
   const [proyectoSeleccionado, setProyectoSeleccionado] =
     useState<ProyectoType | null>(null);
   const [modalAbierto, setModalAbierto] = useState(false);
-  const [searchTerm, setSearchTerm] = useState("");
 
   const abrirDetalle = (proyecto: ProyectoType) => {
     setProyectoSeleccionado(proyecto);
@@ -78,28 +76,14 @@ const ProyectoList: React.FC<ProyectoListProps> = ({
     return total > 0 ? (completadas / total) * 100 : 0;
   };
 
-  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value;
-    setSearchTerm(value);
-
-    setTimeout(() => {
-      console.log("Buscando:", value);
-      onSearch?.(value);
-    }, 300);
-  };
-
   const handlePageChange = (
     event: React.ChangeEvent<unknown>,
     page: number
   ) => {
-    console.log("Cambiando a página:", page);
     onPageChange?.(page);
   };
 
   const totalPages = Math.ceil(totalProyectos / pageSize);
-  console.log("Total de páginas:", totalPages);
-  console.log("Total de proyectos:", totalProyectos);
-  console.log("pageSize page:", pageSize);
 
   return (
     <Box sx={{ p: 2 }}>
