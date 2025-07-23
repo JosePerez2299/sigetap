@@ -9,19 +9,20 @@ import {
   type UnidadTypeResponse,
 } from "../types/generalTypes";
 import { type EstadoProyectoType } from "../types/generalTypes";
+import { handleErrorMessage } from "../utils/handleErrorMessage";
 
 const getAll = async ({
-  page,
-  pageSize,
-  sortBy,
-  filterBy,
-  searchTerm,
+  page = 1,
+  pageSize = 10,
+  sortBy= 'nombre',
+  filterBy= '',
+  searchTerm= '',
 }: {
-  page: number;
-  pageSize: number;
-  sortBy: string;
-  filterBy: EstadoProyectoType | "todos" | "";
-  searchTerm: string;
+  page?: number;
+  pageSize?: number;
+  sortBy?: string;
+  filterBy?: EstadoProyectoType | "todos" | "";
+  searchTerm?: string;
 }): Promise<ProyectoTypeResponse> => {
   console.log(
     "getAll",
@@ -41,19 +42,29 @@ const getAll = async ({
     filterBy = "";
   }
 
-  const response = await privateApi.get(urls.proyectos, {
-    params: {
-      page,
-      page_size: pageSize,
-      ordering: sortBy,
-      estado: filterBy,
-      search: searchTerm,
-    },
-  });
+ try {
+  
+   const response = await privateApi.get(urls.proyectos, {
+     params: {
+       page,
+       page_size: pageSize,
+       ordering: sortBy,
+       estado: filterBy,
+       search: searchTerm,
+     },
+   });
+   console.log(response.data);
+   return response.data;
+ } catch (error) {
+  console.log(error);
+  
+  throw new Error(handleErrorMessage(error));
+ }
 
-  console.log(response.data);
+  
+  await new Promise<void>((resolve) => setTimeout(resolve, 1000));
 
-  return response.data;
+
   const lider = {
     id: 1,
     email: "lider1@example.com",

@@ -19,6 +19,7 @@ privateApi.interceptors.request.use((config) => {
 privateApi.interceptors.response.use(
   response => response,
   async (error) => {
+
     const originalRequest = error.config;
      // Manejar 403 - Sin permisos
      if (error.response?.status === 403) {
