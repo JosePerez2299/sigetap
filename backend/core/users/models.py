@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-
+from mptt.models import MPTTModel, TreeForeignKey
 
 # Utilidades para roles de usuario
 class UserRole:
@@ -54,3 +54,18 @@ class User(AbstractUser):
     @property
     def es_lider(self):
         return self.groups.filter(name=UserRole.LIDER).exists()
+
+class Unidad(MPTTModel):
+    nombre = models.CharField(max_length=100)
+    padre  = TreeForeignKey(
+        'self',
+        on_delete=models.CASCADE,
+        null=True, blank=True,
+        related_name='hijos'
+    )
+
+    class MPTTMeta:
+        order_insertion_by = ['nombre']
+
+    def __str__(self):
+        return self.nombre
