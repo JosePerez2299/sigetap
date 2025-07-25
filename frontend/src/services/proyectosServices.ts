@@ -14,15 +14,17 @@ import { handleErrorMessage } from "../utils/handleErrorMessage";
 const getAll = async ({
   page = 1,
   pageSize = 10,
-  sortBy= 'nombre',
-  filterBy= '',
-  searchTerm= '',
+  sortBy = 'nombre',
+  filterBy = '',
+  searchTerm = '',
+  unidad = '',
 }: {
   page?: number;
   pageSize?: number;
   sortBy?: string;
   filterBy?: EstadoProyectoType | "todos" | "";
   searchTerm?: string;
+  unidad?: string;
 }): Promise<ProyectoTypeResponse> => {
   console.log(
     "getAll",
@@ -35,33 +37,36 @@ const getAll = async ({
     "filterBy:",
     filterBy,
     "searchTerm:",
-    searchTerm
+    searchTerm,
+    "unidad:",
+    unidad
   );
 
   if (filterBy === "todos") {
     filterBy = "";
   }
 
- try {
-  
-   const response = await privateApi.get(urls.proyectos, {
-     params: {
-       page,
-       page_size: pageSize,
-       ordering: sortBy,
-       estado: filterBy,
-       search: searchTerm,
-     },
-   });
-   console.log(response.data);
-   return response.data;
- } catch (error) {
-  console.log(error);
-  
-  throw new Error(handleErrorMessage(error));
- }
+  try {
 
-  
+    const response = await privateApi.get(urls.proyectos, {
+      params: {
+        page,
+        page_size: pageSize,
+        ordering: sortBy,
+        estado: filterBy,
+        search: searchTerm,
+        unidad_responsable: unidad,
+      },
+    });
+    console.log(response.data);
+    return response.data;
+  } catch (error) {
+    console.log(error);
+
+    throw new Error(handleErrorMessage(error));
+  }
+
+
   await new Promise<void>((resolve) => setTimeout(resolve, 1000));
 
 

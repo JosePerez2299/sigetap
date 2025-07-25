@@ -20,9 +20,9 @@ const Pagination: React.FC<PaginationProps> = ({ page, totalItems, pageSize, set
     };
   return (
     <div>
-      <div className="join">
+      <div className="join ">
         {pages.map((p) => (
-            <button key={p} className={`join-item btn btn-xs ${page === p ? 'btn-active btn-primary scale-110' : ''}`} onClick={() => handlePageChange(p)}>{p}</button>
+            <button key={p} className={`join-item btn  ${page === p ? 'btn-active btn-primary scale-110' : ''}`} onClick={() => handlePageChange(p)}>{p}</button>
         ))}
       </div>
     </div>

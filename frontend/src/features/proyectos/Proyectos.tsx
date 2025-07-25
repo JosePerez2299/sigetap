@@ -32,7 +32,7 @@ const SORT_OPTIONS = [
 /**
  * Configuración de paginación por defecto
  */
-const DEFAULT_PAGE_SIZE = 10;
+const DEFAULT_PAGE_SIZE = 4;
 const DEFAULT_PAGE = 1;
 
 /**
@@ -44,32 +44,33 @@ interface FiltersState {
   sortBy: string;
   page: number;
   pageSize: number;
+  unidad: string;
 }
-
-/**
- * Estado inicial de los filtros
- */
-const INITIAL_FILTERS: FiltersState = {
-  searchTerm: "",
-  filterBy: "todos",
-  sortBy: "nombre",
-  page: DEFAULT_PAGE,
-  pageSize: DEFAULT_PAGE_SIZE
-};
 
 /**
  * Componente principal para la gestión y visualización de proyectos
  * Incluye funcionalidades de búsqueda, filtrado, ordenamiento y paginación
  */
 const Proyectos: React.FC = () => {
+
+ const INITIAL_FILTERS: FiltersState = {
+   searchTerm: "",
+   filterBy: "todos",
+   sortBy: "nombre",
+   page: DEFAULT_PAGE,
+   pageSize: DEFAULT_PAGE_SIZE,
+   unidad: "",
+ };
+ 
   // Hooks y estado
-  const { user } = useUser();
+  const { user, isLoading: isLoadingUser } = useUser();
+
   
   // Estado unificado para todos los filtros
   const [filters, setFilters] = useState<FiltersState>(INITIAL_FILTERS);
 
   // Query para obtener los proyectos
-  const { data, isLoading, isError, error } = useQuery({
+  const { data, isLoading: isLoadingProyectos, isError: isErrorProyectos, error: errorProyectos } = useQuery({
     queryKey: ["proyectos", filters.page, filters.pageSize, filters.searchTerm, filters.filterBy, filters.sortBy],
     queryFn: () =>
       proyectosServices.getAll({
@@ -78,9 +79,16 @@ const Proyectos: React.FC = () => {
         searchTerm: filters.searchTerm,
         filterBy: filters.filterBy,
         sortBy: filters.sortBy,
+        unidad: filters.unidad,
       }),
+      enabled: !!user ,
   });
 
+
+  const isLoading = isLoadingProyectos || isLoadingUser;
+  const isError = isErrorProyectos;
+  const error = errorProyectos;
+  
   /**
    * Configuración de columnas para la tabla de proyectos
    */
@@ -113,6 +121,9 @@ const Proyectos: React.FC = () => {
         );
       },
     },
+    { key: "unidad_responsable", title: "Unidad responsable" },
+
+
   ];
 
   /**
@@ -144,6 +155,14 @@ const Proyectos: React.FC = () => {
         <p className="text-base-content/70 mt-2">
           Administra y visualiza todos tus proyectos
         </p>
+
+        <div className="flex justify-end">
+          <button className="btn btn-primary">Agregar Proyecto</button>
+        </div>
+
+        <div className="flex justify-end">
+          {JSON.stringify(user)}
+        </div>
       </div>
 
       {/* Panel de filtros y búsqueda mejorado */}
@@ -170,26 +189,6 @@ const Proyectos: React.FC = () => {
               </div>
             </div>
 
-            {/* Filtro por estado */}
-            <div className="form-control min-w-48">
-              <label className="label">
-                <span className="label-text font-medium flex items-center gap-2">
-                  <FontAwesomeIcon icon={faFilter} className="text-sm" />
-                  Filtrar por estado
-                </span>
-              </label>
-              <select 
-                className="select select-bordered w-full focus:select-secondary"
-                value={filters.filterBy}
-                onChange={(e) => handleFilterChange({ filterBy: e.target.value as EstadoProyectoType | "todos" })}
-              >
-                {FILTER_OPTIONS.map((option) => (
-                  <option key={option} value={option}>
-                    {getFilterDisplayName(option)}
-                  </option>
-                ))}
-              </select>
-            </div>
 
             {/* Ordenamiento */}
             <div className="form-control min-w-48">
@@ -212,6 +211,8 @@ const Proyectos: React.FC = () => {
               </select>
             </div>
           </div>
+
+      
 
           {/* Filtros activos de manera compacta */}
           {(filters.searchTerm || filters.filterBy !== "todos") && (
@@ -245,7 +246,13 @@ const Proyectos: React.FC = () => {
                   </button>
                 </div>
               )}
-              
+              {/* Filtro por estado */}
+            <div className="filter">
+              <input className="btn filter-reset" type="radio" name="metaframeworks" aria-label="All"/>
+              {FILTER_OPTIONS.map((option) => (
+                <input className="btn" type="radio" name="metaframeworks" aria-label={option}/>
+              ))}
+            </div>
               <button 
                 className="btn btn-ghost btn-xs text-base-content/50 hover:text-base-content"
                 onClick={() => setFilters(INITIAL_FILTERS)}
@@ -301,7 +308,7 @@ const Proyectos: React.FC = () => {
                   </div>
                   
                   {/* Paginación */}
-                  <div className="p-4 border-t border-base-300">
+                  <div className="p-4 border-t border-base-300 flex justify-center">
                     <Pagination
                       page={filters.page}
                       totalItems={data.count}

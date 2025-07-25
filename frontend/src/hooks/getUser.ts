@@ -4,12 +4,12 @@ import { useQuery } from "@tanstack/react-query";
 export const useUser = () => {
   const {
     data: user,
-    isLoading: loadingUser,
-    error: errorUser,
+    isLoading,
+    error,
   } = useQuery({
     queryKey: ["user"],
     queryFn: () => userServices.getUser(),
   });
 
-  return { user, loadingUser, errorUser };
+  return { user, isLoading, error };
 };
