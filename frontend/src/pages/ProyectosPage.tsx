@@ -1,4 +1,4 @@
-import Proyectos from "../features/proyectos/Proyectos";
+import Proyectos2 from "../features/proyectos/Proyectos2";
 import { useSelector } from "react-redux";
 import type { RootState } from "../store/RootState";
 const ProyectosPage = () => {
@@ -8,7 +8,7 @@ const ProyectosPage = () => {
   return (
     <>
       
-      <Proyectos />
+      <Proyectos2 />
     </>
   );
 };
