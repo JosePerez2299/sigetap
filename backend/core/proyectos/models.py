@@ -16,7 +16,7 @@ class Proyecto(models.Model):
     estado = models.CharField(max_length=20, choices=Estado.choices, default=Estado.PLANIFICADO)
     
     # TO DO: Relacionar con la unidad responsable, lider y miembros
-    unidad_responsable = models.CharField(max_length=100) 
+    unidad_responsable = models.ForeignKey("users.Unidad", verbose_name=("Unidad responsable"), on_delete=models.CASCADE)
     lider = models.ForeignKey("users.User", verbose_name=("Líder"), on_delete=models.CASCADE)
 
     # TO DO: Implementar codigo con prefijo PR , unico

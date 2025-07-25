@@ -3,6 +3,7 @@ from core.proyectos.models import Proyecto
 from django.utils import timezone
 from datetime import timedelta
 from core.users.models import User
+from core.users.models import Unidad
 import random
 
 class Command(BaseCommand):
@@ -22,6 +23,7 @@ class Command(BaseCommand):
         creados = 0
 
         lider = User.objects.first()
+        unidad = Unidad.objects.first()
         for i in range(cantidad):
             nombre = f"Proyecto automático {i}"
             descripcion = "Descripción generada automáticamente."
@@ -36,7 +38,7 @@ class Command(BaseCommand):
                 descripcion=descripcion,
                 fecha_inicio=timezone.now(),
                 fecha_fin=timezone.now() + timedelta(days=30),
-                unidad_responsable="Unidad responsable generada automáticamente.",
+                unidad_responsable=unidad,
                 lider=lider,
                 codigo=f"PR-COD-{i}",
                 estado=random.choice([Proyecto.Estado.PLANIFICADO, Proyecto.Estado.EJECUCION, Proyecto.Estado.PAUSADO, Proyecto.Estado.FINALIZADO]),
