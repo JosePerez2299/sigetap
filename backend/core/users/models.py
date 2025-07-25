@@ -23,9 +23,12 @@ class User(AbstractUser):
     telefono = models.CharField(max_length=15, blank=True, null=True)
 
     # Campos del LDAP
-    nom_gerencia_general = models.CharField(max_length=100, blank=True, null=True)
-    nom_unidad = models.CharField(max_length=100, blank=True, null=True)
-    nom_unidad_reporta = models.CharField(max_length=100, blank=True, null=True)
+    unidad = models.ForeignKey(
+        'Unidad',
+        on_delete=models.CASCADE,
+        null=True, blank=True,
+        related_name='miembros'
+    )
 
     # Campos adicionales
     nom_coordinacion = models.CharField(max_length=100, blank=True, null=True)
@@ -57,7 +60,8 @@ class User(AbstractUser):
 
 class Unidad(MPTTModel):
     nombre = models.CharField(max_length=100)
-    padre  = TreeForeignKey(
+    codigo = models.CharField(max_length=100, unique=True)
+    parent  = TreeForeignKey(
         'self',
         on_delete=models.CASCADE,
         null=True, blank=True,
@@ -68,4 +72,5 @@ class Unidad(MPTTModel):
         order_insertion_by = ['nombre']
 
     def __str__(self):
-        return self.nombre
+        return f"{self.codigo} - {self.nombre}"
+    
