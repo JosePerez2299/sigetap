@@ -21,9 +21,9 @@ const HierarchyPanel: React.FC<HierarchyPanelProps> = ({
   if (!data) return <div> No hay jerarquía disponible</div>;
 
   return (
-    <div className="border border-base-300 shadow-lg card">
+    <div className="border border-base-300 max-h-fit shadow-lg card">
       <div className="card-body">
-        <div className="text-lg font-bold ">
+        <div className="card-title">
           <h2>Jerarquía Organizacional</h2>
         </div>
         <Tree

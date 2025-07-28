@@ -1,23 +1,27 @@
 import React from "react";
 import type { ProjectsPanelProps } from "../types/Projects";
 import ProjectsHeader from "./ProjectsHeader";
+import ProjectsFilters from "./ProjectsFilters";
 
 const ProjectsPanel: React.FC<ProjectsPanelProps> = ({ unidad }) => {
+  const [showFilters, setShowFilters] = React.useState(true);
+
   return (
     <>
-      <div className="card  p-4 ">
-        <div className="card-title">
-          <ProjectsHeader unidad={unidad}></ProjectsHeader>
+      <div className="card border border-base-300 shadow-lg mb-4">
+        <div className="card-body">
+          <ProjectsHeader
+            unidad={unidad}
+            showFilters={showFilters}
+            setShowFilters={setShowFilters}
+          ></ProjectsHeader>
+
+         <ProjectsFilters showFilters={showFilters} setShowFilters={setShowFilters} />
         </div>
-        {unidad && (
-          <div className="card bg-base-100">
-            <div className="card-body">
-              <div className="card-title">Titulo</div>
-              <div>bodu</div>
-            </div>
-          </div>
-        )}
       </div>
+
+
+      {JSON.stringify(unidad?.nombre)}
     </>
   );
 };

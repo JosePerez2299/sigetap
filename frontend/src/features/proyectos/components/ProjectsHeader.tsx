@@ -1,48 +1,37 @@
 import type React from "react";
 import type { ProjectsHeaderProps } from "../types/Projects";
-import { LucidePlus  as PlusIcon} from "lucide-react";
- 
-const ProjectsHeader: React.FC<ProjectsHeaderProps> = ({
-  unidad,
-  filters,
-  className,
-}) => {
-  const filterOptions = ["opcion 1", "opcion 2", "opcion 3"];
+import { LucidePlus as PlusIcon } from "lucide-react";
+
+const ProjectsHeader: React.FC<ProjectsHeaderProps> = ({ unidad }) => {
   return (
     <>
-      <div className="card mb-2 w-full bg-base-100">
-        <div className="card-body">
-          {/* Header principal */}
-          <div className="card-title">
-            {unidad ? (
-              <p>Proyectos de la unidad: {unidad?.nombre}</p>
-            ) : (
-              <h1>seleccione una </h1>
-            )}
-          </div>
-
-          {/* filtrado */}
-          {unidad && (
-            <div>
-              <form className="filter">
-                {filterOptions.map((option) => (
-                  <input
-                    className="btn btn-square btn-sm"
-                    type="radio"
-                    name="frameworks"
-                    aria-label={option}
-                  />
-                ))}
-
-                <input
-                  className="btn btn-square bg-error text-error-content btn-sm"
-                  type="reset"
-                  value="x"
-                />
-              </form>
+      {/* Header principal */}
+      <div className="flex items-center justify-between mb-4">
+        <div className="card-title">
+          {unidad ? (
+            <div className="flex items-center gap-2">
+              <div className="badge badge-md badge-primary badge-outline truncate">
+                {unidad?.nombre}
+              </div>
+              <div className="badge badge-sm badge-secondary badge-outline">
+                {/* Aquí podrías mostrar el número total de proyectos */}
+                24 proyectos
+              </div>
             </div>
+          ) : (
+            <h1 className="text-xl font-medium text-base-content/70">
+              Seleccione una unidad
+            </h1>
           )}
         </div>
+
+        {/* Botón agregar proyecto */}
+        {unidad && (
+          <button className="btn btn-primary btn-sm gap-2">
+            <PlusIcon size={16} />
+            Añadir
+          </button>
+        )}
       </div>
     </>
   );

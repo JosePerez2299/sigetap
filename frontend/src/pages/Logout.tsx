@@ -3,6 +3,9 @@ import { useAuth } from "../hooks/useAuth"
 
 function Logout() {
     const { logout } = useAuth()
+    // Eliminar cache de tanstack
+    localStorage.removeItem("react-query/cache")
+    sessionStorage.removeItem("react-query/cache")
     logout()
     return <Navigate to="/login" />
 }

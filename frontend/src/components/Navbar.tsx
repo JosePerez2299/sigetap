@@ -93,7 +93,7 @@ const Navbar = () => {
               <a>Settings</a>
             </li>
             <li>
-              <a>Logout</a>
+              <Link to={ROUTES.LOGOUT}>Logout</Link>
             </li>
           </ul>
         </div>

@@ -33,7 +33,7 @@ const TreeNode: React.FC<TreeNodeProps> = ({
         className={`flex items-center py-2 px-3 rounded-lg cursor-pointer transition-all duration-200 ${
           isSelected
             ? "bg-primary text-primary-content"
-            : "hover:bg-neutral/30 hover:text-neutral-content text-base-content"
+            : "hover:bg-neutral/20 text-base-content"
         }`}
         style={{ paddingLeft: `${level * 20 + 12}px` }}
         onClick={handleNodeClick}

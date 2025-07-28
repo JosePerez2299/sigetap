@@ -3,7 +3,7 @@ import { useUser } from "../../hooks/getUser";
 import HierarchyPanel from "./components/HierarchyPanel";
 import { useHierarchy } from "./hooks/useHierarchy";
 import ProjectsPanel from "./components/ProjectsPanel";
-import { Building } from "lucide-react";
+import { Building, Building2, Folder, PlusIcon } from "lucide-react";
 
 const TreeExample: React.FC = () => {
   const { user, isLoading: isLoadingUser, error: errorUser } = useUser();
@@ -23,8 +23,15 @@ const TreeExample: React.FC = () => {
 
   if (isLoadingAll) {
     return (
-      <div className="min-h-screen bg-base-200 p-6 flex items-center justify-center">
-        <div className="loading loading-spinner loading-lg"></div>
+      <div className="min-h-screen  w-full ">
+        <div className="w-full h-16 skeleton mb-2"></div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 h-full">
+          {/* Panel del árbol */}
+          <div className="col-span-1 min-h-100 skeleton"></div>
+          {/* Panel de detalles */}
+          <div className="lg:col-span-2 h-full skeleton"></div>
+        </div>
       </div>
     );
   }
@@ -41,17 +48,11 @@ const TreeExample: React.FC = () => {
 
   return (
     <div className="">
-      <div className="navbar bg-base-100 border border-base-300 rounded-box mb-6 shadow-sm">
+      <div className="navbar bg-gradient-to-br from-base-100  via-base-200 to-primary/10 border border-base-300 rounded-box mb-6 shadow-sm">
         <div className="flex-1 px-4 py-3">
           <div className="flex flex-col space-y-1">
             <h1 className="text-2xl font-semibold text-base-content flex items-center gap-3">
-              <svg
-                className="w-6 h-6 text-primary"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-              >
-                <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z" />
-              </svg>
+              <Building2 className="text-primary"/>
               Gestión de Proyectos
             </h1>
             <p className="text-sm text-base-content/70">
@@ -61,7 +62,7 @@ const TreeExample: React.FC = () => {
         </div>
       </div>
 
-      <div className=" grid grid-cols-1 lg:grid-cols-3">
+      <div className=" grid grid-cols-1 lg:grid-cols-3 gap-4">
         {/* Panel del árbol */}
         <HierarchyPanel
           data={data}
@@ -73,7 +74,21 @@ const TreeExample: React.FC = () => {
 
         {/* Panel de detalles */}
         <div className="lg:col-span-2">
-          <ProjectsPanel unidad={selectedNode}></ProjectsPanel>
+          {selectedNode ? (
+            <ProjectsPanel unidad={selectedNode}></ProjectsPanel>
+          ) : (
+            <div className="card flex flex-col items-center justify-center h-full border border-base-300 rounded-box  shadow-lg bg-base-100 gap-4">
+              <div className="text-center">
+                <p className="text-xl font-semibold text-base-content ">
+                  Selecciona una unidad
+                </p>
+                <p className="text-sm text-base-content/70">
+                  Selecciona una unidad para ver sus proyectos
+                </p>
+              </div>
+              <Folder className="text-base-content/70" size={64} />
+            </div>
+          )}
         </div>
       </div>
     </div>
