@@ -3,13 +3,22 @@ from django.contrib.auth import get_user_model
 from .models import Unidad
 User = get_user_model()
 
+
+class UnidadSerializer(serializers.ModelSerializer):
+    nombre = serializers.CharField()
+    codigo = serializers.CharField()
+
+    class Meta:
+        model = Unidad
+        fields = ['id', 'nombre', 'codigo']
+
 class UserSerializer(serializers.ModelSerializer):
+    unidad = UnidadSerializer()
+    
     class Meta: 
         model = User
-        
         fields = ['id', 'username', 'email', 'first_name', 'last_name', 'p00', 
                    'unidad', 'nom_coordinacion', 'nom_departamento']
-          # Adjust fields as necessary
         read_only_fields = ['id']  # Make 'id' read-only if you don't want it to be editable
     
 

@@ -5,4 +5,5 @@ export const urls = {
     refreshToken: "/auth/token/refresh/",
     proyectos: "/proyectos/",
     user: "auth/user/",
+    hierarchy: "/users/hierarchy/",
 };

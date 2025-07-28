@@ -6,8 +6,11 @@ export const UserSchema = z.object({
   username: z.string(),
   first_name: z.string(),
   last_name: z.string(),
-  nom_unidad: z.string().optional(),
-  nom_gerencia_general: z.string().optional(),
+  unidad: z.object({
+    id: z.number(),
+    nombre: z.string(),
+    codigo: z.string(),
+  }),
   nom_coordinacion: z.string().optional(),
   nom_departamento: z.string().optional(),
   p00: z.string().optional(),
