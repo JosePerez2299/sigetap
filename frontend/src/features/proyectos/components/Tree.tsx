@@ -6,10 +6,9 @@ import {
   FolderOpen,
   Search,
 } from "lucide-react";
-import type { TreeNodeProps, TreeProps , TreeNodeData } from "../types/Tree";
+import type { TreeNodeProps, TreeProps, TreeNodeData } from "../types/Tree";
 
 import TreeNode from "./TreeNode";
-
 
 // Componente Tree principal
 const Tree: React.FC<TreeProps> = ({
@@ -139,26 +138,25 @@ const Tree: React.FC<TreeProps> = ({
   );
 
   return (
-    <div className={`card bg-base-100 shadow-sm ${className}`}>
+    <div className={`card ${className}`}>
       <div className="card-body p-4">
         {/* Buscador */}
         <div className="form-control mb-4">
-          <div className="input-group">
-            <span className="bg-base-200">
-              <Search className="w-4 h-4" />
-            </span>
-            <input
-              type="text"
-              placeholder="Buscar unidad..."
-              className="input input-bordered flex-1"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
+          <div>
+            <label className="input">
+              <Search />
+              <input
+                type="text"
+                placeholder="Buscar unidad..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+            </label>
           </div>
         </div>
 
         {/* Árbol */}
-        <div className="overflow-y-auto max-h-96">
+        <div className="overflow-y-auto max-h-96 ">
           <div className="space-y-1">
             {filteredData.length > 0 ? (
               renderNodes(filteredData)
@@ -183,27 +181,3 @@ const Tree: React.FC<TreeProps> = ({
 
 export default Tree;
 
-// Hook personalizado para manejar el estado del árbol
-export const useTreeState = (initialSelectedId?: number | null) => {
-  const [selectedNode, setSelectedNode] = useState<TreeNodeData | null>(null);
-  const [selectedNodeId, setSelectedNodeId] = useState<number | null>(
-    initialSelectedId || null
-  );
-
-  const handleNodeSelect = useCallback((node: TreeNodeData) => {
-    setSelectedNode(node);
-    setSelectedNodeId(node.id);
-  }, []);
-
-  const clearSelection = useCallback(() => {
-    setSelectedNode(null);
-    setSelectedNodeId(null);
-  }, []);
-
-  return {
-    selectedNode,
-    selectedNodeId,
-    handleNodeSelect,
-    clearSelection,
-  };
-};

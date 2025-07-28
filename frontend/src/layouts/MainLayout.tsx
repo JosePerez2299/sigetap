@@ -6,7 +6,7 @@ import Navbar from '../components/Navbar';
 const MainLayout: React.FC = () => (
   <>
     <Navbar />
-    <main className="container mx-auto"  >
+    <main className="container max-w-6xl mx-auto p-6 "  >
       <Outlet />
     </main>
   </>
