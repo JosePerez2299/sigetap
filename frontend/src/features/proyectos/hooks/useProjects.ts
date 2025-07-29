@@ -6,7 +6,7 @@ import { type FiltersState } from "../types/Projects";
 export const useProjects = (unidadId: number) => {
   const initialFilters: FiltersState = {
     searchTerm: "",
-    filterBy: "todos",
+    filterBy: undefined,
     sortBy: "nombre",
     page: 1,
     pageSize: 10,

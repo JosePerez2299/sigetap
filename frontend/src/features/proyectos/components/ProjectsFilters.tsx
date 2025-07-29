@@ -1,6 +1,8 @@
-import React from "react";
-import { Funnel, FunnelX } from "lucide-react";
+import React, { useEffect, useState } from "react";
+import { Funnel, FunnelX, Search, X } from "lucide-react";
 import type { ProjectsFiltersProps } from "../types/Projects";
+import type { EstadoProyectoType } from "../../../types/generalTypes";
+import { useDebounce } from "use-debounce";
 
 const ProjectsFilters: React.FC<ProjectsFiltersProps> = ({
   filters,
@@ -8,19 +10,84 @@ const ProjectsFilters: React.FC<ProjectsFiltersProps> = ({
   setShowFilters,
   onFilterChange,
 }) => {
+  // Opciones para el select de estado
+  const FILTER_OPTIONS: (EstadoProyectoType | "Todos")[] = [
+    "Todos",
+    "Planificado",
+    "Ejecucion",
+    "Pausado",
+    "Finalizado",
+  ];
+
+  // Estado local para el valor del input
+  const [inputValue, setInputValue] = useState(filters?.searchTerm || "");
+
+  // Valor debounced con 500ms de retraso - CORRECCIÓN AQUÍ
+  const [debouncedValue, setDebouncedValue] = useDebounce(inputValue, 500);
+
+  // Funcion para manejar el cambio del input
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputValue(e.target.value);
+  };
+
+  // Funcion para limpiar los filtros
+  const clearFilters = () => {
+    setInputValue("");
+    setDebouncedValue("");
+  };
+
+  // Cuando cambie el valor debounced, notificamos al parent
+  useEffect(() => {
+    onFilterChange?.({ searchTerm: debouncedValue });
+  }, [debouncedValue]);
+
   return (
     <div>
       {/* Header de filtros */}
-      <div className="flex items-center justify-between gap-2 mb-4">
+      <div className="flex items-end justify-between gap-2 mb-4">
         {/* Buscador */}
-        <div className="w-full">
-          <input
-            type="search"
-            className="input input-bordered w-full"
-            placeholder="Buscar"
-            value={filters?.searchTerm}
-            onChange={(e) => onFilterChange?.({ searchTerm: e.target.value })}
-          />
+        <div className="flex-1 join">
+          <div className="w-full join-item">
+            <label className="label">
+              <span className="label-text">Buscar</span>
+            </label>
+            <label className="input w-full">
+              <Search className="w-4 h-4" />
+              <input
+                type="search"
+                placeholder="Buscar por nombre de proyecto o lider"
+                value={inputValue}
+                onChange={handleInputChange}
+              />
+            </label>
+          </div>
+
+          {/* Filtros por estado del proyecto*/}
+          <div className="join-item min-w-fit">
+            <label className="label">
+              <span className="label-text">Estado</span>
+            </label>
+            <select
+              className="select"
+              value={
+                filters?.filterBy !== undefined ? filters?.filterBy : "Todos"
+              }
+              onChange={(e) =>
+                onFilterChange?.({
+                  filterBy:
+                    e.target.value === "Todos"
+                      ? undefined
+                      : (e.target.value as EstadoProyectoType),
+                })
+              }
+            >
+              {FILTER_OPTIONS.map((option) => (
+                <option key={option} value={option}>
+                  {option}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
 
         {/* Boton de filtros */}
@@ -45,32 +112,66 @@ const ProjectsFilters: React.FC<ProjectsFiltersProps> = ({
       {showFilters && (
         <div className="bg-base-300 rounded-box p-4">
           <div className="grid grid-cols-2 gap-2">
-            <select className="select select-bordered">
-              <option disabled selected>
-                Filtar por
-              </option>
-              <option>Fecha de inicio</option>
-              <option>Fecha de fin</option>
-              <option>Lider</option>
-            </select>
-            <input type="date" className="input input-bordered" />
-            <input type="date" className="input input-bordered" />
-            <select className="select select-bordered">
-              <option>Fecha de fin</option>
-              <option>Lider</option>
-            </select>
+            <div className="col-span-2 ">
+              <div className="form-control">
+                <label className="label">
+                  <span className="label-text">Filtrar por</span>
+                </label>
+                <select className="select select-bordered">
+                  <option disabled selected className="text-base-content/70">
+                    Filtar por
+                  </option>
+                  <option>Fecha de inicio</option>
+                  <option>Fecha de fin</option>
+                  <option>Lider</option>
+                </select>
+              </div>
+            </div>
+            <div className="form-control">
+              <label className="label">
+                <span className="label-text">Fecha de inicio</span>
+              </label>
+              <input type="date" className="input input-bordered" />
+            </div>
+            <div className="form-control">
+              <label className="label">
+                <span className="label-text">Fecha de fin</span>
+              </label>
+              <input type="date" className="input input-bordered" />
+            </div>
+            <div className="form-control">
+              <label className="label">
+                <span className="label-text">Lider</span>
+              </label>
+              <select className="select select-bordered">
+                <option>Lider</option>
+              </select>
+            </div>
           </div>
         </div>
       )}
 
       {/* filtros activos */}
-      {true && (
+      {(filters?.filterBy !== undefined || inputValue !== "") && (
         <div className="mt-4">
           <h2 className="text-sm font-semibold mb-2">Filtros activos</h2>
           <div className="flex items-center gap-2">
-            <span className="badge badge-outline">32 proyectos</span>
-            <span className="badge badge-outline">Fecha de fin</span>
-            <span className="badge badge-outline">Lider</span>
+            {filters?.filterBy !== undefined && (
+              <button
+                onClick={() => onFilterChange?.({ filterBy: undefined })}
+                className="btn btn-outline btn-primary btn-sm gap-2"
+              >
+                {filters?.filterBy} <X size={16} />
+              </button>
+            )}
+            {inputValue !== "" && (
+              <button
+                onClick={clearFilters}
+                className="btn btn-outline btn-primary btn-sm gap-2"
+              >
+                {inputValue} <X size={16} />
+              </button>
+            )}
           </div>
         </div>
       )}

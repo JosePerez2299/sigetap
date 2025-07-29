@@ -30,7 +30,7 @@ export interface FiltersState {
   fechaFin?: Date;
   lider?: string;
   searchTerm?: string;
-  filterBy: EstadoProyectoType | "todos";
+  filterBy?: EstadoProyectoType ;
   sortBy?: string;
   unidadId: number;
 }
