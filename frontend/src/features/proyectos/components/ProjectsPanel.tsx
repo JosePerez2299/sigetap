@@ -4,6 +4,8 @@ import ProjectsHeader from "./ProjectsHeader";
 import ProjectsFilters from "./ProjectsFilters";
 import { useProjects } from "../hooks/useProjects";
 import ProjectsList from "./ProjectsList";
+import Pagination from "../../../components/Pagination";
+
 const ProjectsPanel: React.FC<ProjectsPanelProps> = ({ unidad }) => {
   const { data: projects, isLoading, error, filters } = useProjects(unidad.id);
 
@@ -35,6 +37,12 @@ const ProjectsPanel: React.FC<ProjectsPanelProps> = ({ unidad }) => {
             projects={projects?.data}
             isLoading={isLoading}
             error={error}
+          />
+          <Pagination
+            page={filters.filters.page || 1}
+            pageSize={filters.filters.pageSize || 10}
+            totalItems={projects?.count || 0}
+            setPage={(page) => filters.handleFilterChange({ page })}
           />
         </div>
       </div>

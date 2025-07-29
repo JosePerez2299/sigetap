@@ -25,13 +25,21 @@ const ProjectsFilters: React.FC<ProjectsFiltersProps> = ({
   // Valor debounced con 500ms de retraso - CORRECCIÓN AQUÍ
   const [debouncedValue, setDebouncedValue] = useDebounce(inputValue, 500);
 
+  const isActiveFilters = filters?.filterBy !== undefined || inputValue !== "";
   // Funcion para manejar el cambio del input
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
   };
 
-  // Funcion para limpiar los filtros
   const clearFilters = () => {
+    onFilterChange?.({
+      filterBy: undefined,
+    });
+    clearSearchFilters();
+  };
+
+  // Funcion para limpiar los filtros
+  const clearSearchFilters = () => {
     setInputValue("");
     setDebouncedValue("");
   };
@@ -109,64 +117,51 @@ const ProjectsFilters: React.FC<ProjectsFiltersProps> = ({
       </div>
 
       {/* Filtros */}
-      {showFilters && (
-        <div className="bg-base-300 rounded-box p-4">
-          <div className="grid grid-cols-2 gap-2">
-            <div className="col-span-2 ">
-              <div className="form-control">
-                <label className="label">
-                  <span className="label-text">Filtrar por</span>
-                </label>
-                <select className="select select-bordered">
-                  <option disabled selected className="text-base-content/70">
-                    Filtar por
-                  </option>
-                  <option>Fecha de inicio</option>
-                  <option>Fecha de fin</option>
-                  <option>Lider</option>
-                </select>
-              </div>
-            </div>
-            <div className="form-control">
-              <label className="label">
-                <span className="label-text">Fecha de inicio</span>
-              </label>
-              <input type="date" className="input input-bordered" />
-            </div>
-            <div className="form-control">
-              <label className="label">
-                <span className="label-text">Fecha de fin</span>
-              </label>
-              <input type="date" className="input input-bordered" />
-            </div>
-            <div className="form-control">
-              <label className="label">
-                <span className="label-text">Lider</span>
-              </label>
-              <select className="select select-bordered">
-                <option>Lider</option>
-              </select>
-            </div>
+      <div
+        className={`mt-4 bg-base-300 rounded-box overflow-hidden transition-all duration-300 ease-in-out ${
+          showFilters ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
+        }`}
+      >
+        <div className="grid grid-cols-2 gap-2 p-4">
+          <div className="form-control">
+            <label className="label">
+              <span className="label-text">Fecha de inicio</span>
+            </label>
+            <input type="date" className="input input-bordered" />
+          </div>
+          <div className="form-control">
+            <label className="label">
+              <span className="label-text">Fecha de fin</span>
+            </label>
+            <input type="date" className="input input-bordered" />
           </div>
         </div>
-      )}
+      </div>
 
       {/* filtros activos */}
-      {(filters?.filterBy !== undefined || inputValue !== "") && (
-        <div className="mt-4">
-          <h2 className="text-sm font-semibold mb-2">Filtros activos</h2>
+      {isActiveFilters && (
+        <div className="mt-4" >
+          <div className="flex items-center justify-between">
+            <h2 className="text-sm font-semibold mb-2">Filtros activos</h2>
+            <button
+              onClick={clearFilters}
+              className="btn btn-outline btn-xs gap-2"
+            >
+              Limpiar filtros
+            </button>
+          </div>
           <div className="flex items-center gap-2">
             {filters?.filterBy !== undefined && (
               <button
                 onClick={() => onFilterChange?.({ filterBy: undefined })}
-                className="btn btn-outline btn-primary btn-sm gap-2"
+                className="btn btn-outline btn-secondary btn-sm gap-2"
               >
                 {filters?.filterBy} <X size={16} />
               </button>
             )}
             {inputValue !== "" && (
               <button
-                onClick={clearFilters}
+                onClick={clearSearchFilters}
                 className="btn btn-outline btn-primary btn-sm gap-2"
               >
                 {inputValue} <X size={16} />
