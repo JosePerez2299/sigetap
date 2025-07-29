@@ -8,23 +8,28 @@ User = get_user_model()
 
 class ProyectoSerializer(serializers.ModelSerializer):
     lider = UserSerializer(read_only=True)
-    lider_id = serializers.PrimaryKeyRelatedField(
-        queryset=User.objects.all(), source='lider', write_only=True
-    )
+
+    tareas_total = serializers.IntegerField(read_only=True)
+    tareas_completadas = serializers.IntegerField(read_only=True)
+    tareas_pendientes = serializers.IntegerField(read_only=True)
 
     class Meta:
         model = Proyecto
         fields = [
-            'id', 'nombre',
+            'id', 
+            'nombre',
             'descripcion',
             'fecha_inicio',
             'fecha_fin',
             'estado',
+            'tareas_total',
+            'tareas_completadas',
+            'tareas_pendientes',
             'unidad_responsable',
             'codigo',
             'lider',
-            'lider_id',
         ]
+
 
 class ProyectoPaginatedResponseSerializer(serializers.Serializer):
     """Serializer para documentar la respuesta paginada de Proyecto"""

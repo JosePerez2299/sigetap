@@ -9,21 +9,33 @@ from django_filters.rest_framework import DjangoFilterBackend
 from .filters import ProyectoFilter
 from .pagination import ProyectoPagination
 from drf_spectacular.utils import OpenApiParameter
+from django.db.models import Count, Q
+
 
 class ProyectoList(generics.ListAPIView):
     pagination_class = ProyectoPagination
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     filterset_class = ProyectoFilter
-    search_fields = ['nombre', 'lider__username'    ]
+    search_fields = ['nombre', 'lider__username']
     ordering_fields = ['nombre', 'lider', 'unidad_responsable']
-    queryset = Proyecto.objects.all()
     serializer_class = ProyectoSerializer
 
-    
+    def get_queryset(self):
+        qs = Proyecto.objects.all()
+        qs = qs.select_related('lider','lider__unidad')
+        qs = qs.select_related('unidad_responsable')
+        qs = qs.annotate(
+            tareas_total=Count('tareas'),
+            tareas_completadas=Count(
+                'tareas__estado', filter=Q(tareas__estado='Completado')),
+            tareas_pendientes=Count(
+                'tareas__estado', filter=Q(tareas__estado='Pendiente')),
+        )
+
+        return qs
 
 
 class ProyectoDetail(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [IsAuthenticated]
     queryset = Proyecto.objects.all()
     serializer_class = ProyectoSerializer
-
