@@ -23,7 +23,7 @@ class Command(BaseCommand):
         creados = 0
 
         lider = User.objects.first()
-        unidad = Unidad.objects.first()
+        unidad = lider.unidad
         for i in range(cantidad):
             nombre = f"Proyecto automático {i}"
             descripcion = "Descripción generada automáticamente."

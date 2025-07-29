@@ -1,10 +1,10 @@
-import type { ChangeEventHandler } from "react";
 import type { TreeNodeData } from "./Tree";
+import type { EstadoProyectoType } from "../../../types/generalTypes";
 
 export interface UnidadType extends TreeNodeData {}
 
 export interface ProjectsPanelProps {
-  unidad: UnidadType | null;
+  unidad: UnidadType;
 }
 
 export interface ProjectsHeaderProps {
@@ -19,7 +19,7 @@ export interface ProjectsFiltersProps {
   showFilters: boolean;
   setShowFilters: (value: boolean) => void;
   filters?: FiltersState;
-  onFilterChange?: ChangeEventHandler<HTMLInputElement>;
+  onFilterChange?: (updates: Partial<FiltersState>) => void;
   clearFilters?: () => void;
 }
 
@@ -30,7 +30,7 @@ export interface FiltersState {
   fechaFin?: Date;
   lider?: string;
   searchTerm?: string;
-  filterBy?: string;
+  filterBy: EstadoProyectoType | "todos";
   sortBy?: string;
-  unidad?: string;
+  unidadId: number;
 }

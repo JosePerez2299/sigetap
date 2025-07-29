@@ -14,7 +14,7 @@ class ProyectoList(generics.ListAPIView):
     pagination_class = ProyectoPagination
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     filterset_class = ProyectoFilter
-    search_fields = ['nombre', 'unidad_responsable']
+    search_fields = ['nombre', 'lider__username'    ]
     ordering_fields = ['nombre', 'lider', 'unidad_responsable']
     queryset = Proyecto.objects.all()
     serializer_class = ProyectoSerializer

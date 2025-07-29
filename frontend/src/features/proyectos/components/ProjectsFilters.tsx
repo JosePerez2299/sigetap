@@ -6,6 +6,7 @@ const ProjectsFilters: React.FC<ProjectsFiltersProps> = ({
   filters,
   showFilters,
   setShowFilters,
+  onFilterChange,
 }) => {
   return (
     <div>
@@ -14,9 +15,11 @@ const ProjectsFilters: React.FC<ProjectsFiltersProps> = ({
         {/* Buscador */}
         <div className="w-full">
           <input
-            type="text"
+            type="search"
             className="input input-bordered w-full"
             placeholder="Buscar"
+            value={filters?.searchTerm}
+            onChange={(e) => onFilterChange?.({ searchTerm: e.target.value })}
           />
         </div>
 

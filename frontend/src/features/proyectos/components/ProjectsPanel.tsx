@@ -1,10 +1,15 @@
-import React from "react";
+import React, { useEffect } from "react";
 import type { ProjectsPanelProps } from "../types/Projects";
 import ProjectsHeader from "./ProjectsHeader";
 import ProjectsFilters from "./ProjectsFilters";
-
+import { useProjects } from "../hooks/useProjects";
+import ProjectsList from "./ProjectsList";
 const ProjectsPanel: React.FC<ProjectsPanelProps> = ({ unidad }) => {
-  const [showFilters, setShowFilters] = React.useState(true);
+  const { data: projects, isLoading, error, filters } = useProjects(unidad.id);
+
+  useEffect(() => {
+    filters.handleFilterChange({ unidadId: unidad.id });
+  }, [unidad.id]);
 
   return (
     <>
@@ -12,16 +17,27 @@ const ProjectsPanel: React.FC<ProjectsPanelProps> = ({ unidad }) => {
         <div className="card-body">
           <ProjectsHeader
             unidad={unidad}
-            showFilters={showFilters}
-            setShowFilters={setShowFilters}
+            showFilters={filters.showFilters}
+            setShowFilters={filters.setShowFilters}
           ></ProjectsHeader>
 
-         <ProjectsFilters showFilters={showFilters} setShowFilters={setShowFilters} />
+          <ProjectsFilters
+            showFilters={filters.showFilters}
+            setShowFilters={filters.setShowFilters}
+            filters={filters.filters}
+            onFilterChange={filters.handleFilterChange}
+          />
         </div>
       </div>
-
-
-      {JSON.stringify(unidad?.nombre)}
+      <div className="card border border-base-300 shadow-lg w-full">
+        <div className="card-body">
+          <ProjectsList
+            projects={projects?.data}
+            isLoading={isLoading}
+            error={error}
+          />
+        </div>
+      </div>
     </>
   );
 };
