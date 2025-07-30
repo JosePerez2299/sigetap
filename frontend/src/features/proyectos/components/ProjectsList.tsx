@@ -1,6 +1,4 @@
-import type {
-  ProyectoType,
-} from "../../../types/generalTypes";
+import type { ProyectoType } from "../../../types/generalTypes";
 import ProjectCard from "./ProjectCard";
 const ProjectsList = ({
   projects,
@@ -17,6 +15,15 @@ const ProjectsList = ({
   isLoading: boolean;
   error: Error | null;
 }) => {
+
+
+
+  const handleProjectClick = (proyecto: ProyectoType) => {
+    console.log(proyecto);
+  };
+
+  const currentStart = count > 0 ? (currentPage - 1) * pageSize + 1 : 0;
+  const currentEnd = count > 0 ? currentStart + projects.length - 1 : 0;
   return (
     <div className="relative min-h-[400px]">
       {/* Loading Skeleton */}
@@ -107,14 +114,19 @@ const ProjectsList = ({
         <li>
           <div className="flex items-center justify-between">
             <span className="text-sm text-base-content/70">
-              Resultados del {currentPage * pageSize - pageSize + 1} al{" "}
-              {currentPage * pageSize - (pageSize - projects.length)}
+              Resultados del {currentStart} al {currentEnd}
             </span>
-            <span className="badge badge-sm badge-info badge-outline">Total: {count}</span>
+            <span className="badge badge-sm badge-info badge-outline">
+              Total: {count}
+            </span>
           </div>
         </li>
         {projects?.map((proyecto) => (
-          <ProjectCard key={proyecto.id} proyecto={proyecto} />
+          <ProjectCard
+            key={proyecto.id}
+            proyecto={proyecto}
+            onClick={handleProjectClick}
+          />
         ))}
       </ul>
     </div>
