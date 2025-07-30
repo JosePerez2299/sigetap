@@ -12,10 +12,15 @@ export const useFilters = (initialFilters: FiltersState) => {
     }));
   };
 
+  const resetFilters = () => {
+    setFilters(initialFilters);
+  };
+
   return {
     showFilters,
     setShowFilters,
     filters,
     handleFilterChange,
+    resetFilters,
   };
 };

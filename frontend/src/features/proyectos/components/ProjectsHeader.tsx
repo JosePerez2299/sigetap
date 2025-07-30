@@ -11,7 +11,7 @@ const ProjectsHeader: React.FC<ProjectsHeaderProps> = ({ unidad }) => {
           {unidad ? (
             <div className="flex items-center gap-2">
               <div className="badge badge-md badge-primary badge-outline truncate">
-                {unidad?.nombre}
+                {unidad}
               </div>
               <div className="badge badge-sm badge-secondary badge-outline">
                 {/* Aquí podrías mostrar el número total de proyectos */}

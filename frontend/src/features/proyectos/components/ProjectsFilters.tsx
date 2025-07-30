@@ -1,172 +1,135 @@
+import { Funnel, FunnelX, XIcon } from "lucide-react";
 import React, { useEffect, useState } from "react";
-import { Funnel, FunnelX, Search, X } from "lucide-react";
-import type { ProjectsFiltersProps } from "../types/Projects";
-import type { EstadoProyectoType } from "../../../types/generalTypes";
 import { useDebounce } from "use-debounce";
+import type { FiltersState, ProjectsFiltersProps } from "../types/Projects";
+import type { EstadoProyectoType } from "../../../types/generalTypes";
 
-const ProjectsFilters: React.FC<ProjectsFiltersProps> = ({
-  filters,
+const ProjectsFilters2: React.FC<ProjectsFiltersProps> = ({
   showFilters,
   setShowFilters,
+  filters,
+  resetFilters,
   onFilterChange,
 }) => {
-  // Opciones para el select de estado
-  const FILTER_OPTIONS: (EstadoProyectoType | "Todos")[] = [
-    "Todos",
-    "Planificado",
-    "Ejecucion",
-    "Pausado",
-    "Finalizado",
-  ];
-
   // Estado local para el valor del input
   const [inputValue, setInputValue] = useState(filters?.searchTerm || "");
 
   // Valor debounced con 500ms de retraso - CORRECCIÓN AQUÍ
   const [debouncedValue, setDebouncedValue] = useDebounce(inputValue, 500);
 
-  const isActiveFilters = filters?.filterBy !== undefined || inputValue !== "";
-  // Funcion para manejar el cambio del input
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setInputValue(e.target.value);
-  };
+  const FILTER_OPTIONS: { label: string; value: EstadoProyectoType | "" }[] = [
+    { label: "Todos", value: "" },
+    { label: "Planificado", value: "Planificado" },
+    { label: "Ejecucion", value: "Ejecucion" },
+    { label: "Pausado", value: "Pausado" },
+    { label: "Finalizado", value: "Finalizado" },
+  ];
 
-  const clearFilters = () => {
-    onFilterChange?.({
-      filterBy: undefined,
-    });
-    clearSearchFilters();
-  };
-
-  // Funcion para limpiar los filtros
-  const clearSearchFilters = () => {
-    setInputValue("");
-    setDebouncedValue("");
-  };
-
-  // Cuando cambie el valor debounced, notificamos al parent
   useEffect(() => {
-    onFilterChange?.({ searchTerm: debouncedValue });
-  }, [debouncedValue]);
+    if (debouncedValue !== filters.searchTerm) {
+      onFilterChange?.({ searchTerm: debouncedValue, page: 1 });
+    }
+  }, [debouncedValue, filters.searchTerm]);
+
+  useEffect(() => {
+    setInputValue("");
+  }, [filters.unidadId]);
 
   return (
     <div>
-      {/* Header de filtros */}
-      <div className="flex items-end justify-between gap-2 mb-4">
-        {/* Buscador */}
-        <div className="flex-1 join">
-          <div className="w-full join-item">
-            <label className="label">
-              <span className="label-text">Buscar</span>
-            </label>
-            <label className="input w-full">
-              <Search className="w-4 h-4" />
+      {filters.unidadId !== 0 && (
+        <div className="card w-full border border-base-300 shadow-lg mb-4">
+          <div className="card-body">
+            <div className="flex items-center justify-between">
+              <h3 className="card-title">Panel de filtros</h3>
+              {/* Boton de filtros */}
+              <div
+                className="tooltip"
+                data-tip={showFilters ? "Ocultar filtros" : "Mostrar filtros"}
+              >
+                <button
+                  className={`btn btn-circle btn-ghost  ${
+                    showFilters ? "btn-active " : ""
+                  }`}
+                  onClick={() => setShowFilters(!showFilters)}
+                >
+                  {showFilters ? (
+                    <FunnelX className="text-error font-bold" size={18} />
+                  ) : (
+                    <Funnel size={18} />
+                  )}
+                </button>
+              </div>
+            </div>
+            <div className="join">
               <input
-                type="search"
-                placeholder="Buscar por nombre de proyecto o lider"
+                type="text"
+                placeholder="Buscar"
                 value={inputValue}
-                onChange={handleInputChange}
+                onChange={(e) => setInputValue(e.target.value)}
+                className="input input-bordered join-item w-2/3"
               />
-            </label>
-          </div>
-
-          {/* Filtros por estado del proyecto*/}
-          <div className="join-item min-w-fit">
-            <label className="label">
-              <span className="label-text">Estado</span>
-            </label>
-            <select
-              className="select"
-              value={
-                filters?.filterBy !== undefined ? filters?.filterBy : "Todos"
-              }
-              onChange={(e) =>
-                onFilterChange?.({
-                  filterBy:
-                    e.target.value === "Todos"
-                      ? undefined
-                      : (e.target.value as EstadoProyectoType),
-                })
-              }
-            >
-              {FILTER_OPTIONS.map((option) => (
-                <option key={option} value={option}>
-                  {option}
+              <select
+                name=""
+                id=""
+                className="select select-bordered join-item w-1/3"
+                value={filters.filterBy ? filters.filterBy : ""}
+                onChange={(e) =>
+                  onFilterChange?.({
+                    filterBy: e.target.value as EstadoProyectoType,
+                    page: 1,
+                  })
+                }
+              >
+                <option disabled defaultValue="" selected>
+                  Estado
                 </option>
-              ))}
-            </select>
-          </div>
-        </div>
+                {FILTER_OPTIONS.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+            {/* Mostrar filtros */}
 
-        {/* Boton de filtros */}
-        <div
-          className="tooltip"
-          data-tip={showFilters ? "Ocultar filtros" : "Mostrar filtros"}
-        >
-          <button
-            className={`btn btn-square ${showFilters ? "btn-active " : ""}`}
-            onClick={() => setShowFilters(!showFilters)}
-          >
-            {showFilters ? (
-              <FunnelX className="text-error" size={18} />
-            ) : (
-              <Funnel size={18} />
-            )}
-          </button>
-        </div>
-      </div>
-
-      {/* Filtros */}
-      <div
-        className={`mt-4 bg-base-300 rounded-box overflow-hidden transition-all duration-300 ease-in-out ${
-          showFilters ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
-        }`}
-      >
-        <div className="grid grid-cols-2 gap-2 p-4">
-          <div className="form-control">
-            <label className="label">
-              <span className="label-text">Fecha de inicio</span>
-            </label>
-            <input type="date" className="input input-bordered" />
-          </div>
-          <div className="form-control">
-            <label className="label">
-              <span className="label-text">Fecha de fin</span>
-            </label>
-            <input type="date" className="input input-bordered" />
-          </div>
-        </div>
-      </div>
-
-      {/* filtros activos */}
-      {isActiveFilters && (
-        <div className="mt-4" >
-          <div className="flex items-center justify-between">
-            <h2 className="text-sm font-semibold mb-2">Filtros activos</h2>
-            <button
-              onClick={clearFilters}
-              className="btn btn-outline btn-xs gap-2"
+            <div
+              className={`transition-all duration-200  grid grid-cols-2 bg-base-200 rounded-box text-xs ${
+                showFilters ? "h-auto opacity-100" : " opacity-0 h-0"
+              }`}
             >
-              Limpiar filtros
-            </button>
-          </div>
-          <div className="flex items-center gap-2">
-            {filters?.filterBy !== undefined && (
-              <button
-                onClick={() => onFilterChange?.({ filterBy: undefined })}
-                className="btn btn-outline btn-secondary btn-sm gap-2"
-              >
-                {filters?.filterBy} <X size={16} />
-              </button>
-            )}
-            {inputValue !== "" && (
-              <button
-                onClick={clearSearchFilters}
-                className="btn btn-outline btn-primary btn-sm gap-2"
-              >
-                {inputValue} <X size={16} />
-              </button>
-            )}
+              <div>
+                <label className="label label-xs">Fecha inicio</label>
+                <input type="date" className="input input-bordered" />
+              </div>
+              <div>
+                <label className="label label-xs">Fecha fin</label>
+                <input type="date" className="input input-bordered" />
+              </div>
+            </div>
+
+            <div className="">
+              <p className="text-sm text-base-content/70">Filtros aplicados</p>
+              <div className="flex items-center gap-2 flex-wrap">
+                <button className="btn badge-outline badge badge-sm badge-secondary">
+                  {" "}
+                  Planificado
+                  <XIcon size={16} />
+                </button>
+                <button className="btn badge-outline badge badge-sm badge-warning">
+                  {" "}
+                  Ejecución
+                </button>
+                <button className="btn badge-outline badge badge-sm badge-error">
+                  {" "}
+                  Pausado
+                </button>
+                <button className="btn badge-outline badge badge-sm badge-success">
+                  {" "}
+                  Finalizado
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       )}
@@ -174,4 +137,4 @@ const ProjectsFilters: React.FC<ProjectsFiltersProps> = ({
   );
 };
 
-export default ProjectsFilters;
+export default ProjectsFilters2;

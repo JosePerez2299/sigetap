@@ -4,11 +4,12 @@ import type { EstadoProyectoType } from "../../../types/generalTypes";
 export interface UnidadType extends TreeNodeData {}
 
 export interface ProjectsPanelProps {
-  unidad: UnidadType;
+  filters: FiltersState;
+  handleFilterChange: (updates: Partial<FiltersState>) => void;
 }
 
 export interface ProjectsHeaderProps {
-  unidad?: UnidadType | null;
+  unidad?: number;
   className?: string;
   filters?: FiltersState;
   showFilters?: boolean;
@@ -18,9 +19,9 @@ export interface ProjectsHeaderProps {
 export interface ProjectsFiltersProps {
   showFilters: boolean;
   setShowFilters: (value: boolean) => void;
-  filters?: FiltersState;
-  onFilterChange?: (updates: Partial<FiltersState>) => void;
-  clearFilters?: () => void;
+  filters: FiltersState;
+  onFilterChange: (updates: Partial<FiltersState>) => void;
+  resetFilters: () => void;
 }
 
 export interface FiltersState {

@@ -52,9 +52,9 @@ export const ProyectoSchema = z.object({
   lider: UserSchema,
 
   codigo: z.string().min(1, { message: "El código es obligatorio" }),
-  tareas_completadas: z.number().optional(),
-  tareas_total: z.number().optional(),
-  tareas_pendientes: z.number().optional(),
+  tareas_completadas: z.number(),
+  tareas_total: z.number(),
+  tareas_pendientes: z.number(),
   miembros_total: z.number().optional(),
 });
 

@@ -1,9 +1,18 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useUser } from "../../hooks/getUser";
 import HierarchyPanel from "./components/HierarchyPanel";
 import { useHierarchy } from "./hooks/useHierarchy";
 import ProjectsPanel from "./components/ProjectsPanel";
-import { Building, Building2, Folder, PlusIcon } from "lucide-react";
+import {
+  Building,
+  Building2,
+  Filter,
+  Folder,
+  PlusIcon,
+  XIcon,
+} from "lucide-react";
+import { useFilters } from "./hooks/useFilters";
+import ProjectsFilters from "./components/ProjectsFilters";
 
 const TreeExample: React.FC = () => {
   const { user, isLoading: isLoadingUser, error: errorUser } = useUser();
@@ -18,8 +27,31 @@ const TreeExample: React.FC = () => {
     clearSelection,
   } = useHierarchy(user?.unidad?.codigo);
 
+  const {
+    filters,
+    handleFilterChange,
+    setShowFilters,
+    showFilters,
+    resetFilters,
+  } = useFilters({
+    searchTerm: "",
+    filterBy: undefined,
+    sortBy: "nombre",
+    page: 1,
+    pageSize: 5,
+    unidadId: selectedNode?.id || 0,
+  });
+
   const isLoadingAll = isLoadingUser || isLoading;
   const errorAll = errorUser || error;
+
+  useEffect(() => {
+    resetFilters();
+  }, [selectedNodeId]);
+
+  useEffect(() => {
+    console.log("filters", filters);
+  }, [filters]);
 
   if (isLoadingAll) {
     return (
@@ -48,34 +80,33 @@ const TreeExample: React.FC = () => {
 
   return (
     <div className="">
-      <div className="navbar bg-gradient-to-br from-base-100  via-base-200 to-primary/10 border border-base-300 rounded-box mb-6 shadow-sm">
-        <div className="flex-1 px-4 py-3">
-          <div className="flex flex-col space-y-1">
-            <h1 className="text-2xl font-semibold text-base-content flex items-center gap-3">
-              <Building2 className="text-primary"/>
-              Gestión de Proyectos
-            </h1>
-            <p className="text-sm text-base-content/70">
-              Visualiza y administra tus proyectos
-            </p>
-          </div>
-        </div>
-      </div>
-
       <div className=" grid grid-cols-1 lg:grid-cols-3 gap-4">
-        {/* Panel del árbol */}
-        <HierarchyPanel
-          data={data}
-          isLoading={isLoading}
-          error={error}
-          selectedNodeId={selectedNodeId}
-          onNodeSelect={handleNodeSelect}
-        />
+        <div>
+          <ProjectsFilters
+            showFilters={showFilters}
+            setShowFilters={setShowFilters}
+            filters={filters}
+            onFilterChange={handleFilterChange}
+            resetFilters={resetFilters}
+          />
+
+          {/* Panel del árbol */}
+          <HierarchyPanel
+            data={data}
+            isLoading={isLoading}
+            error={error}
+            selectedNodeId={selectedNodeId}
+            onNodeSelect={handleNodeSelect}
+          />
+        </div>
 
         {/* Panel de detalles */}
-        <div className="lg:col-span-2">
-          {selectedNode ? (
-            <ProjectsPanel unidad={selectedNode}></ProjectsPanel>
+        <div className="lg:col-span-2 max-h-[calc(100vh-100px)] ">
+          {selectedNode && filters ? (
+            <ProjectsPanel
+              filters={filters}
+              handleFilterChange={handleFilterChange}
+            ></ProjectsPanel>
           ) : (
             <div className="card flex flex-col items-center justify-center h-full border border-base-300 rounded-box  shadow-lg bg-base-100 gap-4">
               <div className="text-center">

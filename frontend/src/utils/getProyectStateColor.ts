@@ -1,18 +1,17 @@
-import theme from "../theme/theme";
 import { EstadoProyectoEnum } from "../types/generalTypes";
 
 const getEstadoColor = (estado: string) => {
     switch (estado) {
           case EstadoProyectoEnum.Planificado:
-            return theme.palette.info.main;
+            return "bg-info";
           case EstadoProyectoEnum.Ejecucion:
-            return theme.palette.warning.main;
+            return "bg-warning";
           case EstadoProyectoEnum.Pausado:
-            return theme.palette.grey[600];
+            return "bg-gray-600";
           case EstadoProyectoEnum.Finalizado:
-            return theme.palette.success.main;
+            return "bg-success";
           default:
-            return theme.palette.primary.main;
+            return "bg-primary";
         }
     };
 

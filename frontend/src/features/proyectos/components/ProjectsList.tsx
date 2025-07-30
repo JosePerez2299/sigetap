@@ -2,7 +2,10 @@ import type { ProyectoType } from "../../../types/generalTypes";
 import type { ColumnProps } from "../../../components/Table";
 import Table from "../../../components/Table";
 import type { EstadoProyectoType } from "../../../types/generalTypes";
-
+import { formatDate } from "../../../utils/formatDate";
+import getEstadoColor from "../../../utils/getProyectStateColor";
+import { Building2, Calendar, User } from "lucide-react";
+import ProjectCard from "./ProjectCard";
 const ProjectsList = ({
   projects,
   isLoading,
@@ -131,19 +134,13 @@ const ProjectsList = ({
       )}
 
       {/* Content (Table) */}
-      <div
-        className={`transition-all duration-500 ease-in-out transform ${
-          !isLoading && !error && projects && projects.length > 0
-            ? "opacity-100 translate-y-0"
-            : "opacity-0 translate-y-4"
-        }`}
-      >
-        {projects && projects.length > 0 && (
-          <div className="animate-in fade-in slide-in-from-bottom-4 duration-300">
-            <Table columns={columns} data={projects} />
-          </div>
-        )}
-      </div>
+      <ul className="list bg-base-100  space-y-2">
+
+
+        {projects?.map((proyecto) => (
+          <ProjectCard key={proyecto.id} proyecto={proyecto} />
+        ))}
+      </ul>
     </div>
   );
 };

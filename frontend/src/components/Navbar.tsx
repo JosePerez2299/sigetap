@@ -22,7 +22,7 @@ const Navbar = () => {
   const location = useLocation();
   const currentPage = location.pathname;
   return (
-    <div className="navbar sticky top-0 z-50 justify-between bg-base-200 text-base-content shadow-sm px-4 gap-4">
+    <div className="navbar justify-between bg-base-200 text-base-content shadow-sm px-4 gap-4">
       {/* Logo */}
       <div className="">
         <Link to={ROUTES.DASHBOARD} className="  btn btn-ghost text-xl">

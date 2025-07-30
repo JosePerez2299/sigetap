@@ -1,34 +1,21 @@
 import React, { useEffect } from "react";
 import type { ProjectsPanelProps } from "../types/Projects";
 import ProjectsHeader from "./ProjectsHeader";
-import ProjectsFilters from "./ProjectsFilters";
 import { useProjects } from "../hooks/useProjects";
 import ProjectsList from "./ProjectsList";
 import Pagination from "../../../components/Pagination";
 
-const ProjectsPanel: React.FC<ProjectsPanelProps> = ({ unidad }) => {
-  const { data: projects, isLoading, error, filters } = useProjects(unidad.id);
-
-  useEffect(() => {
-    filters.handleFilterChange({ unidadId: unidad.id });
-  }, [unidad.id]);
+const ProjectsPanel: React.FC<ProjectsPanelProps> = ({
+  filters,
+  handleFilterChange,
+}) => {
+  const { data: projects, isLoading, error } = useProjects(filters);
 
   return (
     <>
       <div className="card border border-base-300 shadow-lg mb-4">
         <div className="card-body">
-          <ProjectsHeader
-            unidad={unidad}
-            showFilters={filters.showFilters}
-            setShowFilters={filters.setShowFilters}
-          ></ProjectsHeader>
-
-          <ProjectsFilters
-            showFilters={filters.showFilters}
-            setShowFilters={filters.setShowFilters}
-            filters={filters.filters}
-            onFilterChange={filters.handleFilterChange}
-          />
+          <ProjectsHeader unidad={filters.unidadId}></ProjectsHeader>
         </div>
       </div>
       <div className="card border border-base-300 shadow-lg w-full">
@@ -39,10 +26,10 @@ const ProjectsPanel: React.FC<ProjectsPanelProps> = ({ unidad }) => {
             error={error}
           />
           <Pagination
-            page={filters.filters.page || 1}
-            pageSize={filters.filters.pageSize || 10}
+            page={filters.page || 1}
+            pageSize={filters.pageSize || 10}
             totalItems={projects?.count || 0}
-            setPage={(page) => filters.handleFilterChange({ page })}
+            setPage={(page) => handleFilterChange({ page })}
           />
         </div>
       </div>
