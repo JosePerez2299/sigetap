@@ -66,6 +66,7 @@ const ProjectsFilters2: React.FC<ProjectsFiltersProps> = ({
                 type="text"
                 placeholder="Buscar"
                 value={inputValue}
+                maxLength={20}
                 onChange={(e) => setInputValue(e.target.value)}
                 className="input input-bordered join-item w-2/3"
               />
@@ -92,44 +93,42 @@ const ProjectsFilters2: React.FC<ProjectsFiltersProps> = ({
               </select>
             </div>
             {/* Mostrar filtros */}
-
-            <div
-              className={`transition-all duration-200  grid grid-cols-2 bg-base-200 rounded-box text-xs ${
-                showFilters ? "h-auto opacity-100" : " opacity-0 h-0"
-              }`}
-            >
-              <div>
-                <label className="label label-xs">Fecha inicio</label>
-                <input type="date" className="input input-bordered" />
+            {showFilters && (
+              <div
+                className={`transition-all duration-200  grid grid-cols-2 bg-base-200 rounded-box text-xs`}
+              >
+                <div>
+                  <label className="label label-xs">Fecha inicio</label>
+                  <input type="date" className="input input-bordered" />
+                </div>
+                <div>
+                  <label className="label label-xs">Fecha fin</label>
+                  <input type="date" className="input input-bordered" />
+                </div>
               </div>
-              <div>
-                <label className="label label-xs">Fecha fin</label>
-                <input type="date" className="input input-bordered" />
+            )}
+            {/* Filtros aplicados */}
+            {(filters.filterBy || filters.searchTerm) && (
+              <div className="">
+                <p className="text-sm text-base-content/70">
+                  Filtros aplicados
+                </p>
+                <div className="flex items-center gap-2 flex-wrap">
+                  {filters.filterBy && (
+                    <button className=" cursor-pointer btn rounded-full btn-sm btn-primary btn-outline" onClick={() => onFilterChange?.({ filterBy: undefined, page: 1 })}>
+                      {filters.filterBy}
+                      <XIcon size={16} />
+                    </button>
+                  )}
+                  {filters.searchTerm && inputValue.length > 0 && (
+                    <button className=" cursor-pointer btn rounded-full btn-sm btn-primary btn-outline" onClick={() => setInputValue("")}>
+                      {inputValue}
+                      <XIcon size={16} />
+                    </button>
+                  )}
+                </div>
               </div>
-            </div>
-
-            <div className="">
-              <p className="text-sm text-base-content/70">Filtros aplicados</p>
-              <div className="flex items-center gap-2 flex-wrap">
-                <button className="btn badge-outline badge badge-sm badge-secondary">
-                  {" "}
-                  Planificado
-                  <XIcon size={16} />
-                </button>
-                <button className="btn badge-outline badge badge-sm badge-warning">
-                  {" "}
-                  Ejecución
-                </button>
-                <button className="btn badge-outline badge badge-sm badge-error">
-                  {" "}
-                  Pausado
-                </button>
-                <button className="btn badge-outline badge badge-sm badge-success">
-                  {" "}
-                  Finalizado
-                </button>
-              </div>
-            </div>
+            )}
           </div>
         </div>
       )}

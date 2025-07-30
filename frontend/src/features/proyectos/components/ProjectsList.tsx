@@ -1,53 +1,22 @@
-import type { ProyectoType } from "../../../types/generalTypes";
-import type { ColumnProps } from "../../../components/Table";
-import Table from "../../../components/Table";
-import type { EstadoProyectoType } from "../../../types/generalTypes";
-import { formatDate } from "../../../utils/formatDate";
-import getEstadoColor from "../../../utils/getProyectStateColor";
-import { Building2, Calendar, User } from "lucide-react";
+import type {
+  ProyectoType,
+} from "../../../types/generalTypes";
 import ProjectCard from "./ProjectCard";
 const ProjectsList = ({
   projects,
+  count,
+  currentPage,
+  pageSize,
   isLoading,
   error,
 }: {
-  projects?: Array<ProyectoType>;
+  projects: ProyectoType[];
+  count: number;
+  currentPage: number;
+  pageSize: number;
   isLoading: boolean;
   error: Error | null;
 }) => {
-  const columns: Array<ColumnProps<ProyectoType>> = [
-    {
-      key: "id",
-      title: "ID",
-    },
-    {
-      key: "nombre",
-      title: "Nombre",
-    },
-    {
-      key: "estado",
-      title: "Estado",
-      render: (_, record: ProyectoType) => {
-        const badgeColors = {
-          Planificado: "badge-info",
-          Ejecucion: "badge-warning",
-          Pausado: "badge-error",
-          Finalizado: "badge-success",
-        };
-
-        const colorClass =
-          badgeColors[record.estado as EstadoProyectoType] || "badge-neutral";
-
-        return (
-          <div className={`badge ${colorClass} badge-sm font-medium`}>
-            {record.estado}
-          </div>
-        );
-      },
-    },
-    { key: "unidad_responsable", title: "Unidad responsable" },
-  ];
-
   return (
     <div className="relative min-h-[400px]">
       {/* Loading Skeleton */}
@@ -109,7 +78,7 @@ const ProjectsList = ({
       )}
 
       {/* Empty State */}
-      {!isLoading && !error && projects && projects.length === 0 && (
+      {!isLoading && !error && projects.length === 0 && (
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="text-center transition-all duration-500 animate-in fade-in slide-in-from-bottom-4">
             <div className="w-16 h-16 mx-auto mb-4 text-gray-300">
@@ -135,8 +104,15 @@ const ProjectsList = ({
 
       {/* Content (Table) */}
       <ul className="list bg-base-100  space-y-2">
-
-
+        <li>
+          <div className="flex items-center justify-between">
+            <span className="text-sm text-base-content/70">
+              Resultados del {currentPage * pageSize - pageSize + 1} al{" "}
+              {currentPage * pageSize - (pageSize - projects.length)}
+            </span>
+            <span className="badge badge-sm badge-info badge-outline">Total: {count}</span>
+          </div>
+        </li>
         {projects?.map((proyecto) => (
           <ProjectCard key={proyecto.id} proyecto={proyecto} />
         ))}

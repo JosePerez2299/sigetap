@@ -16,7 +16,7 @@ const getAll = async (filters: FiltersState): Promise<ProyectoTypeResponse> => {
         page,
         page_size: pageSize,
         ordering: sortBy,
-        estado: filterBy === "todos" ? "" : filterBy,
+        estado: filterBy,
         search: searchTerm,
         unidad_responsable: unidadId,
       },

@@ -1,22 +1,22 @@
 import type React from "react";
 import type { ProjectsHeaderProps } from "../types/Projects";
-import { LucidePlus as PlusIcon } from "lucide-react";
+import { Building2, LucidePlus as PlusIcon } from "lucide-react";
 
 const ProjectsHeader: React.FC<ProjectsHeaderProps> = ({ unidad }) => {
   return (
     <>
       {/* Header principal */}
-      <div className="flex items-center justify-between mb-4">
+      <div className="flex items-center justify-between">
         <div className="card-title">
           {unidad ? (
-            <div className="flex items-center gap-2">
-              <div className="badge badge-md badge-primary badge-outline truncate">
-                {unidad}
-              </div>
-              <div className="badge badge-sm badge-secondary badge-outline">
-                {/* Aquí podrías mostrar el número total de proyectos */}
-                24 proyectos
-              </div>
+            <div>
+              <h3 className="text-xl text-primary font-bold">
+                {unidad.nombre}
+              </h3>
+              <p className="text-xs text-base-content/70 mt-1">
+                <Building2 className="w-3 h-3 inline mr-1" /> {unidad.codigo}
+              </p>
+
             </div>
           ) : (
             <h1 className="text-xl font-medium text-base-content/70">

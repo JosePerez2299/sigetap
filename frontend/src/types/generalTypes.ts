@@ -86,7 +86,8 @@ export const ProyectoSchemaResponse = z.object({
     data: ProyectoSchema.array(),
     count: z.number(),
     currentPage: z.number(),
-    pageSize: z.number(),
+    page_size: z.number(),
+    total_pages: z.number(),
 });
 
 export type ProyectoTypeResponse = z.infer<typeof ProyectoSchemaResponse>;

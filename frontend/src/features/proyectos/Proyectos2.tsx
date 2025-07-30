@@ -49,10 +49,6 @@ const TreeExample: React.FC = () => {
     resetFilters();
   }, [selectedNodeId]);
 
-  useEffect(() => {
-    console.log("filters", filters);
-  }, [filters]);
-
   if (isLoadingAll) {
     return (
       <div className="min-h-screen  w-full ">
@@ -104,6 +100,7 @@ const TreeExample: React.FC = () => {
         <div className="lg:col-span-2 max-h-[calc(100vh-100px)] ">
           {selectedNode && filters ? (
             <ProjectsPanel
+              unidad={selectedNode}
               filters={filters}
               handleFilterChange={handleFilterChange}
             ></ProjectsPanel>
