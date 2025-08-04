@@ -37,101 +37,105 @@ const ProjectsFilters2: React.FC<ProjectsFiltersProps> = ({
 
   return (
     <div>
-      {filters.unidadId !== 0 && (
-        <div className="card w-full border border-base-300 shadow-lg mb-4">
-          <div className="card-body">
-            <div className="flex items-center justify-between">
-              <h3 className="card-title">Panel de filtros</h3>
-              {/* Boton de filtros */}
-              <div
-                className="tooltip"
-                data-tip={showFilters ? "Ocultar filtros" : "Mostrar filtros"}
+      <div className="card w-full border border-base-300 shadow-lg mb-4">
+        <div className="card-body">
+          <div className="flex items-center justify-between">
+            <h3 className="card-title">Panel de filtros</h3>
+            {/* Boton de filtros */}
+            <div
+              className="tooltip"
+              data-tip={showFilters ? "Ocultar filtros" : "Mostrar filtros"}
+            >
+              <button
+                className={`btn btn-circle btn-ghost  ${
+                  showFilters ? "btn-active " : ""
+                }`}
+                onClick={() => setShowFilters(!showFilters)}
               >
-                <button
-                  className={`btn btn-circle btn-ghost  ${
-                    showFilters ? "btn-active " : ""
-                  }`}
-                  onClick={() => setShowFilters(!showFilters)}
-                >
-                  {showFilters ? (
-                    <FunnelX className="text-error font-bold" size={18} />
-                  ) : (
-                    <Funnel size={18} />
-                  )}
-                </button>
-              </div>
+                {showFilters ? (
+                  <FunnelX className="text-error font-bold" size={18} />
+                ) : (
+                  <Funnel size={18} />
+                )}
+              </button>
             </div>
-            <div className="join">
-              <input
-                type="text"
-                placeholder="Buscar"
-                value={inputValue}
-                maxLength={20}
-                onChange={(e) => setInputValue(e.target.value)}
-                className="input input-bordered join-item w-2/3"
-              />
-              <select
-                name=""
-                id=""
-                className="select select-bordered join-item w-1/3"
-                value={filters.filterBy ? filters.filterBy : ""}
-                onChange={(e) =>
-                  onFilterChange?.({
-                    filterBy: e.target.value as EstadoProyectoType,
-                    page: 1,
-                  })
-                }
-              >
-                <option disabled defaultValue="" selected>
-                  Estado
-                </option>
-                {FILTER_OPTIONS.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </select>
-            </div>
-            {/* Mostrar filtros */}
-            {showFilters && (
-              <div
-                className={`transition-all duration-200  grid grid-cols-2 bg-base-200 rounded-box text-xs`}
-              >
-                <div>
-                  <label className="label label-xs">Fecha inicio</label>
-                  <input type="date" className="input input-bordered" />
-                </div>
-                <div>
-                  <label className="label label-xs">Fecha fin</label>
-                  <input type="date" className="input input-bordered" />
-                </div>
-              </div>
-            )}
-            {/* Filtros aplicados */}
-            {(filters.filterBy || filters.searchTerm) && (
-              <div className="">
-                <p className="text-sm text-base-content/70">
-                  Filtros aplicados
-                </p>
-                <div className="flex items-center gap-2 flex-wrap">
-                  {filters.filterBy && (
-                    <button className=" cursor-pointer btn rounded-full btn-sm btn-primary btn-outline" onClick={() => onFilterChange?.({ filterBy: undefined, page: 1 })}>
-                      {filters.filterBy}
-                      <XIcon size={16} />
-                    </button>
-                  )}
-                  {filters.searchTerm && inputValue.length > 0 && (
-                    <button className=" cursor-pointer btn rounded-full btn-sm btn-primary btn-outline" onClick={() => setInputValue("")}>
-                      {inputValue}
-                      <XIcon size={16} />
-                    </button>
-                  )}
-                </div>
-              </div>
-            )}
           </div>
+          <div className="join">
+            <input
+              type="text"
+              placeholder="Buscar"
+              value={inputValue}
+              maxLength={20}
+              onChange={(e) => setInputValue(e.target.value)}
+              className="input input-bordered join-item w-2/3"
+            />
+            <select
+              name=""
+              id=""
+              className="select select-bordered join-item w-1/3"
+              value={filters.filterBy ? filters.filterBy : ""}
+              onChange={(e) =>
+                onFilterChange?.({
+                  filterBy: e.target.value as EstadoProyectoType,
+                  page: 1,
+                })
+              }
+            >
+              <option disabled defaultValue="" selected>
+                Estado
+              </option>
+              {FILTER_OPTIONS.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+          </div>
+          {/* Mostrar filtros */}
+          {showFilters && (
+            <div
+              className={`transition-all duration-200  grid grid-cols-2 bg-base-200 rounded-box text-xs`}
+            >
+              <div>
+                <label className="label label-xs">Fecha inicio</label>
+                <input type="date" className="input input-bordered" />
+              </div>
+              <div>
+                <label className="label label-xs">Fecha fin</label>
+                <input type="date" className="input input-bordered" />
+              </div>
+            </div>
+          )}
+          {/* Filtros aplicados */}
+          {(filters.filterBy || filters.searchTerm) && (
+            <div className="">
+              <p className="text-sm text-base-content/70">Filtros aplicados</p>
+              <div className="flex items-center gap-2 flex-wrap">
+                {filters.filterBy && (
+                  <button
+                    className=" cursor-pointer btn rounded-full btn-sm btn-primary btn-outline"
+                    onClick={() =>
+                      onFilterChange?.({ filterBy: undefined, page: 1 })
+                    }
+                  >
+                    {filters.filterBy}
+                    <XIcon size={16} />
+                  </button>
+                )}
+                {filters.searchTerm && inputValue.length > 0 && (
+                  <button
+                    className=" cursor-pointer btn rounded-full btn-sm btn-primary btn-outline"
+                    onClick={() => setInputValue("")}
+                  >
+                    {inputValue}
+                    <XIcon size={16} />
+                  </button>
+                )}
+              </div>
+            </div>
+          )}
         </div>
-      )}
+      </div>
     </div>
   );
 };

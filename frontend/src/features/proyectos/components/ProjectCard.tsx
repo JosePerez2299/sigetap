@@ -28,7 +28,7 @@ const ProjectCard = ({
     <>
       {" "}
       {proyecto && (
-        <li
+        <div
           className="list-row border border-base-300 hover:border-primary/30 hover:shadow-2xl hover:scale-105 transition-all duration-300 cursor-pointer"
           onClick={handleProjectClick}
         >
@@ -96,7 +96,7 @@ const ProjectCard = ({
               {progressPercentage}%
             </div>
           </div>
-        </li>
+        </div>
       )}
 
       <ProjectDetailModal

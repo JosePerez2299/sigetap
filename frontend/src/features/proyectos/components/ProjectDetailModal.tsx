@@ -3,6 +3,7 @@ import React from "react";
 import type { ProyectoType } from "../../../types/generalTypes";
 import Modal from "../../../components/Modal";
 import { Info } from "lucide-react";
+import { Link } from "react-router-dom";
 const ProjectDetailModal = ({
   proyecto,
   isOpen,
@@ -41,7 +42,7 @@ const ProjectDetailModal = ({
         <p>Tareas Pendientes: {proyecto.tareas_pendientes}</p>
         <p>Miembros Total: {proyecto.miembros_total}</p>
         <p> Descripcion: {proyecto.descripcion}</p>
-        <p className="flex items-center gap-2 cursor-pointer underline text-primary transition-all duration-300 hover:text-primary/70" onClick={handleViewDetails}> Ver informacion detallada <span><Info size={16}  /></span></p>
+        <Link to={`/proyectos/${proyecto.id}`} className="flex items-center gap-2 cursor-pointer underline text-primary transition-all duration-300 hover:text-primary/70" onClick={handleViewDetails}> Ver informacion detallada <span><Info size={16}  /></span></Link>
 
       </div>
 

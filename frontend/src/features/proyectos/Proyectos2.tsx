@@ -78,13 +78,15 @@ const TreeExample: React.FC = () => {
     <div className="">
       <div className=" grid grid-cols-1 lg:grid-cols-3 gap-4">
         <div>
-          <ProjectsFilters
-            showFilters={showFilters}
-            setShowFilters={setShowFilters}
-            filters={filters}
-            onFilterChange={handleFilterChange}
-            resetFilters={resetFilters}
-          />
+          {selectedNode && (
+            <ProjectsFilters
+              showFilters={showFilters}
+              setShowFilters={setShowFilters}
+              filters={filters}
+              onFilterChange={handleFilterChange}
+              resetFilters={resetFilters}
+            />
+          )}
 
           {/* Panel del árbol */}
           <HierarchyPanel
