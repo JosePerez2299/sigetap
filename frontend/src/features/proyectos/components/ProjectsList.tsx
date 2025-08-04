@@ -18,9 +18,6 @@ const ProjectsList = ({
 
 
 
-  const handleProjectClick = (proyecto: ProyectoType) => {
-    console.log(proyecto);
-  };
 
   const currentStart = count > 0 ? (currentPage - 1) * pageSize + 1 : 0;
   const currentEnd = count > 0 ? currentStart + projects.length - 1 : 0;
@@ -125,10 +122,11 @@ const ProjectsList = ({
           <ProjectCard
             key={proyecto.id}
             proyecto={proyecto}
-            onClick={handleProjectClick}
           />
         ))}
       </ul>
+
+      
     </div>
   );
 };

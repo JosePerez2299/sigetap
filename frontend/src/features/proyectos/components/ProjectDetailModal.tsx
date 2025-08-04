@@ -1,7 +1,8 @@
-// OPCIÓN 1: Modal controlado completamente por props (Recomendado)
+// components/ProjectDetailModal.tsx
 import React from "react";
 import type { ProyectoType } from "../../../types/generalTypes";
-
+import Modal from "../../../components/Modal";
+import { Info } from "lucide-react";
 const ProjectDetailModal = ({
   proyecto,
   isOpen,
@@ -11,42 +12,40 @@ const ProjectDetailModal = ({
   isOpen: boolean;
   onClose: () => void;
 }) => {
-  if (!isOpen) return null;
 
-  const handleBackdropClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    // Solo cerrar si el click fue exactamente en el backdrop, no en sus hijos
-    if (e.target === e.currentTarget) {
-      onClose();
-    }
+  const handleViewDetails = () => {
+    // Implementar la lógica para ver los detalles del proyecto
+    console.log("Ver detalles del proyecto:", proyecto);
   };
 
   return (
-    <div className="modal modal-open" onClick={handleBackdropClick}>
-      <div className="modal-box">
-        <form method="dialog">
-          <button 
-            className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
-            onClick={onClose}
-            type="button"
-          >
-            ✕
-          </button>
-        </form>
-        
-        <h3 className="text-lg font-bold">{proyecto.nombre}</h3>
-        <p className="py-4">{proyecto.descripcion}</p>
-        
-        <div className="modal-action">
-          <button 
-            onClick={onClose} 
-            className="btn"
-            type="button"
-          >
-            Cerrar
-          </button>
-        </div>
+    <Modal
+      isOpen={isOpen}
+      onClose={onClose}
+      header={<h3 className="text-lg font-bold">{proyecto.nombre}</h3>}
+      footer={
+        <button onClick={onClose} className="btn btn-primary btn-sm" type="button">
+          Cerrar
+        </button>
+      }
+    >
+      <div>
+        <p>Nombre: {proyecto.nombre}</p>
+        <p>Codigo: {proyecto.codigo}</p>
+        <p>Estado: {proyecto.estado}</p>
+        <p>Unidad Responsable: {proyecto.unidad_responsable}</p>
+        <p>Lider: {proyecto.lider.username}</p>
+        <p>Unidad Lider: {proyecto.lider.unidad.codigo}</p>
+        <p>Tareas Completadas: {proyecto.tareas_completadas}</p>
+        <p>Tareas Total: {proyecto.tareas_total}</p>
+        <p>Tareas Pendientes: {proyecto.tareas_pendientes}</p>
+        <p>Miembros Total: {proyecto.miembros_total}</p>
+        <p> Descripcion: {proyecto.descripcion}</p>
+        <p className="flex items-center gap-2 cursor-pointer underline text-primary transition-all duration-300 hover:text-primary/70" onClick={handleViewDetails}> Ver informacion detallada <span><Info size={16}  /></span></p>
+
       </div>
-    </div>
+
+    </Modal>
   );
 };
 
