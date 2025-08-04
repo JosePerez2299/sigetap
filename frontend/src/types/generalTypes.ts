@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { TaskSchema } from "../features/proyectos/types/Task";
 
 export const UserSchema = z.object({
   id: z.number(),
@@ -21,10 +22,21 @@ export type UserType = z.infer<typeof UserSchema>;
 // Enum de estados según TextChoices de Django
 const EstadoProyecto = z.enum([
   "Planificado",
-  "Ejecucion", 
+  "Ejecucion",
   "Pausado",
-  "Finalizado"
+  "Finalizado",
 ] as const);
+
+// Esquema para Unidad (corregido)
+export const UnidadSchema = z.object({
+  id: z.number(),
+  nombre: z.string(),
+  codigo: z.string(),
+  proyectos_total: z.number(),
+  miembros_total: z.number(),
+});
+
+export type UnidadType = z.infer<typeof UnidadSchema>;
 
 export type EstadoProyectoType = z.infer<typeof EstadoProyecto>;
 export const EstadoProyectoEnum = EstadoProyecto.enum;
@@ -44,9 +56,7 @@ export const ProyectoSchema = z.object({
 
   estado: EstadoProyecto,
 
-  unidad_responsable: z.string().min(1, {
-    message: "La unidad responsable es obligatoria",
-  }),
+  unidad_responsable: UnidadSchema,
 
   // Asumimos que tu API serializa el FK "lider" como un integer ID
   lider: UserSchema,
@@ -56,21 +66,11 @@ export const ProyectoSchema = z.object({
   tareas_total: z.number(),
   tareas_pendientes: z.number(),
   miembros_total: z.number().optional(),
+  tareas: TaskSchema.array().optional(),
 });
 
 // Tipo TS inferido automáticamente
 export type ProyectoType = z.infer<typeof ProyectoSchema>;
-
-// Esquema para Unidad (corregido)
-export const UnidadSchema = z.object({
-  id: z.number(),
-  nombre: z.string(),
-  codigo: z.string(),
-  proyectos_total: z.number(),
-  miembros_total: z.number(),
-});
-
-export type UnidadType = z.infer<typeof UnidadSchema>;
 
 export const UnidadSchemaResponse = z.object({
   unidades: UnidadSchema.array(),
@@ -81,13 +81,12 @@ export const UnidadSchemaResponse = z.object({
 
 export type UnidadTypeResponse = z.infer<typeof UnidadSchemaResponse>;
 
-
 export const ProyectoSchemaResponse = z.object({
-    data: ProyectoSchema.array(),
-    count: z.number(),
-    currentPage: z.number(),
-    page_size: z.number(),
-    total_pages: z.number(),
+  data: ProyectoSchema.array(),
+  count: z.number(),
+  currentPage: z.number(),
+  page_size: z.number(),
+  total_pages: z.number(),
 });
 
 export type ProyectoTypeResponse = z.infer<typeof ProyectoSchemaResponse>;

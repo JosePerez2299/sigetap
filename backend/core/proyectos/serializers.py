@@ -2,7 +2,8 @@ from django.contrib.auth import get_user_model
 from rest_framework import serializers
 from core.users.serializers import UserSerializer
 from .models import Proyecto
-
+from core.tareas.serializers import TareaSerializer
+from core.users.serializers import UnidadSerializer
 User = get_user_model()
 
 
@@ -12,12 +13,15 @@ class ProyectoSerializer(serializers.ModelSerializer):
     tareas_total = serializers.IntegerField(read_only=True)
     tareas_completadas = serializers.IntegerField(read_only=True)
     tareas_pendientes = serializers.IntegerField(read_only=True)
+    tareas = TareaSerializer(many=True, read_only=True)
+    unidad_responsable = UnidadSerializer(read_only=True)
 
     class Meta:
         model = Proyecto
         fields = [
-            'id', 
+              'id', 
             'nombre',
+            'codigo',
             'descripcion',
             'fecha_inicio',
             'fecha_fin',
@@ -26,8 +30,8 @@ class ProyectoSerializer(serializers.ModelSerializer):
             'tareas_completadas',
             'tareas_pendientes',
             'unidad_responsable',
-            'codigo',
             'lider',
+            'tareas',
         ]
 
 

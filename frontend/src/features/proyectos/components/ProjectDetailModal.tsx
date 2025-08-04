@@ -34,7 +34,7 @@ const ProjectDetailModal = ({
         <p>Nombre: {proyecto.nombre}</p>
         <p>Codigo: {proyecto.codigo}</p>
         <p>Estado: {proyecto.estado}</p>
-        <p>Unidad Responsable: {proyecto.unidad_responsable}</p>
+        <p>Unidad Responsable: {proyecto.unidad_responsable.nombre}</p>
         <p>Lider: {proyecto.lider.username}</p>
         <p>Unidad Lider: {proyecto.lider.unidad.codigo}</p>
         <p>Tareas Completadas: {proyecto.tareas_completadas}</p>

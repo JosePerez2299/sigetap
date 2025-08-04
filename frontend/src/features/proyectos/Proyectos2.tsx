@@ -51,7 +51,7 @@ const TreeExample: React.FC = () => {
 
   if (isLoadingAll) {
     return (
-      <div className="min-h-screen  w-full ">
+      <div className="container mx-auto min-h-screen  w-full ">
         <div className="w-full h-16 skeleton mb-2"></div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 h-full">
@@ -66,7 +66,7 @@ const TreeExample: React.FC = () => {
 
   if (errorAll) {
     return (
-      <div className="min-h-screen bg-base-200 p-6 flex items-center justify-center">
+      <div className="container mx-auto min-h-screen bg-base-200 p-6 flex items-center justify-center">
         <div className="alert alert-error">
           <span>Error: {errorAll?.message}</span>
         </div>
@@ -75,7 +75,7 @@ const TreeExample: React.FC = () => {
   }
 
   return (
-    <div className="">
+    <div className="container mx-auto p-4">
       <div className=" grid grid-cols-1 lg:grid-cols-3 gap-4">
         <div>
           {selectedNode && (
