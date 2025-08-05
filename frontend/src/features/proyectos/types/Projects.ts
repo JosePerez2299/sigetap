@@ -37,4 +37,16 @@ export interface FiltersState {
   unidadId: number;
 }
 
+export interface AsideDetailProps {
+  currentView: ViewNameType;
+  switchView: (view: ViewNameType) => void;
+}
 
+export interface ViewType {
+  name: ViewNameType;
+  icon: React.ReactNode;
+  onClick: () => void;
+  isActive: boolean;
+}
+
+export type ViewNameType = "tableros" | "gantt" | "calendar" | "files";

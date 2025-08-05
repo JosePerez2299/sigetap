@@ -31,6 +31,8 @@ const getAll = async (filters: FiltersState): Promise<ProyectoTypeResponse> => {
 
 const getOne = async (id: number): Promise<ProyectoType> => {
   try {
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+
     const response = await privateApi.get(`${urls.proyectos}${id}/`);
     return response.data;
   } catch (error) {
