@@ -1,65 +1,53 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import type { ProyectoType } from "../../../types/generalTypes";
 import {
   ArrowLeft,
   Info,
-  ListIcon,
-  ListMinusIcon,
   UserPlusIcon,
-  User,
   Columns2,
   ChartBarStacked,
   Calendar1Icon,
-  FileIcon,
-  Folder,
   FolderClosed,
-  SettingsIcon,
-  ShareIcon,
-  Trash,
-  UserXIcon,
   Eye,
 } from "lucide-react";
 import { formatDate } from "../../../utils/formatDate";
 import getProyectStateColor from "../../../utils/getProyectStateColor";
-import type { ViewNameType } from "../types/Projects";
-
+import ROUTES from "../../../routes/Routes";
 interface AsideDetailProps {
-  currentView: ViewNameType;
-  switchView: (view: ViewNameType) => void;
   proyecto: ProyectoType;
 }
 const AsideDetail = ({
-  currentView,
-  switchView,
   proyecto,
 }: AsideDetailProps) => {
   const navigate = useNavigate();
+  const location = useLocation();
+
   const progress = proyecto.tareas_completadas / proyecto.tareas_total || 0;
 
   const views = [
     {
       name: "Tableros",
       icon: <Columns2 className="w-4 h-4" />,
-      to: `/proyectos/${proyecto.id}/tableros`,
-      isActive: currentView === "tableros",
+      to: `${ROUTES.PROYECTOS}/${proyecto.id}/tableros`,
+      isActive: location.pathname === `${ROUTES.PROYECTOS}/${proyecto.id}/tableros`,
     },
     {
       name: "Gantt",
       icon: <ChartBarStacked className="w-4 h-4" />,
-      to: `/proyectos/${proyecto.id}/gantt`,
-      isActive: currentView === "gantt",
+      to: `${ROUTES.PROYECTOS}/${proyecto.id}/gantt`,
+      isActive: location.pathname === `${ROUTES.PROYECTOS}/${proyecto.id}/gantt`,
     },
     {
       name: "Calendar",
       icon: <Calendar1Icon className="w-4 h-4" />,
-      to: `/proyectos/${proyecto.id}/calendar`,
-      isActive: currentView === "calendar",
+      to: `${ROUTES.PROYECTOS}/${proyecto.id}/calendar`,
+      isActive: location.pathname === `${ROUTES.PROYECTOS}/${proyecto.id}/calendar`,
     },
     {
-      name: "Archivos",
+      name: "Archivos", 
       icon: <FolderClosed className="w-4 h-4" />,
-      to: `/proyectos/${proyecto.id}/files`,
-      isActive: currentView === "files",
+      to: `${ROUTES.PROYECTOS}/${proyecto.id}/files`,
+      isActive: location.pathname === `${ROUTES.PROYECTOS}/${proyecto.id}/files`,
     },
   ];
   return (

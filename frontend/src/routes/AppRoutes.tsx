@@ -1,6 +1,5 @@
 import React from "react";
 import { Routes, Route, Navigate, useLocation } from "react-router-dom";
-import { AnimatePresence } from "framer-motion";
 import MainLayout from "../layouts/MainLayout";
 import PrivateRoute from "./PrivateRoutes";
 import PublicRoute from "./PublicRoutes";
@@ -25,7 +24,6 @@ const AppRoutes: React.FC = () => {
   const location = useLocation();
 
   return (
-    <AnimatePresence mode="wait">
       <Routes location={location} key={location.pathname}>
         {/* Rutas públicas */}
         <Route path="/" element={<PublicRoute />}>
@@ -59,7 +57,6 @@ const AppRoutes: React.FC = () => {
         {/* Fallback */}
         <Route path="*" element={<NotFound404 />} />
       </Routes>
-    </AnimatePresence>  
   );
 };
 
