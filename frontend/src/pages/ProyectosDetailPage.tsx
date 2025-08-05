@@ -9,6 +9,7 @@ import {
   ListIcon,
   ListMinusIcon,
   UserPlusIcon,
+  User,
   Columns2,
   ChartBarStacked,
   Calendar1Icon,
@@ -18,67 +19,76 @@ import {
   SettingsIcon,
   ShareIcon,
   Trash,
+  UserXIcon,
+  Eye,
 } from "lucide-react";
+import { formatDate } from "../utils/formatDate";
+import { proyectosServices } from "../services/proyectosServices";
+import getProyectStateColor from "../utils/getProyectStateColor";
 const ProyectosDetailPage = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const [proyecto, setProyecto] = useState<ProyectoType | null>(null);
-  const dataCard = [
-    {
-      label: "Estado",
-      value: proyecto?.estado,
-      className: "badge badge-warning",
-    },
-    {
-      label: "Fecha Inicio",
-      value: proyecto?.fecha_inicio,
-      className: "badge-info",
-    },
-    { label: "Fecha Fin", value: proyecto?.fecha_fin, className: "" },
-    {
-      label: "Lider",
-      value: proyecto?.lider.username,
-      className: "badge-info",
-    },
-    {
-      label: "Unidad",
-      value: proyecto?.unidad_responsable.nombre,
-      className: "badge-info",
-    },
-    {
-      label: "Progreso",
-      value: proyecto?.tareas_completadas,
-      className: "badge-success",
-    },
-  ];
+  const [progress, setProgress] = useState(0);
+  const [view, setView] = useState("tableros");
+
   const fetchProyecto = async () => {
     try {
-      const response = await privateApi.get(urls.proyectos + `${id}`);
-      const data = await response.data;
+      const response = await proyectosServices.getOne(Number(id));
+      console.log(response);
+      const data = response;
+      console.log(data);
       setProyecto(data);
+
+      setProgress(data.tareas_completadas / data.tareas_total || 0);
     } catch (error) {
       console.error(error);
     }
   };
   useEffect(() => {
-    if (!id) {
-      navigate("/proyectos");
-    }
-
     fetchProyecto();
   }, [id]);
 
   const switchView = (view: string) => {
-    console.log(view);
+    setView(view);
   };
 
+  const views = [
+    {
+      name: "Tableros",
+      icon: <Columns2 className="w-4 h-4" />,
+      onClick: () => switchView("tableros"),
+      isActive: view === "tableros",
+    },
+    {
+      name: "Gantt",
+      icon: <ChartBarStacked className="w-4 h-4" />,
+      onClick: () => switchView("gantt"),
+      isActive: view === "gantt",
+    },
+    {
+      name: "Calendar",
+      icon: <Calendar1Icon className="w-4 h-4" />,
+      onClick: () => switchView("calendar"),
+      isActive: view === "calendar",
+    },
+    {
+      name: "Archivos",
+      icon: <FolderClosed className="w-4 h-4" />,
+      onClick: () => switchView("files"),
+      isActive: view === "files",
+    },
+  ];
   return (
     <div className="flex h-full ">
-      <div className="w-1/4 min-w-72 h-screen-[calc(100vh-10px)] bg-base-100 shadow-lg border-r border-base-300 flex flex-col">
+      <div className="w-1/4 min-w-72  bg-base-100 shadow-lg border-r border-base-300 flex flex-col">
         {/* Header */}
         <div className="p-4 border-b bg-gradient-to-br border-base-300 from-base-100 via-base-100 to-primary/20">
           <div className="flex items-center gap-3 mb-3">
-            <button className="btn btn-ghost btn-circle btn-sm">
+            <button
+              onClick={() => navigate(-1)}
+              className="btn btn-ghost btn-circle btn-sm"
+            >
               <ArrowLeft className="fas fa-arrow-left text-base-content/70"></ArrowLeft>
             </button>
             <div className="flex-1 space-y-1">
@@ -92,7 +102,7 @@ const ProyectosDetailPage = () => {
             </div>
           </div>
 
-          <div className="flex items-center gap-3 border-t border-base-300 pt-4">
+          <div className="flex items-center gap-3 pt-2">
             <div className="relative w-12 h-12">
               <svg className="w-12 h-12">
                 <circle
@@ -116,7 +126,9 @@ const ProyectosDetailPage = () => {
                 />
               </svg>
               <div className="absolute inset-0 flex items-center justify-center">
-                <span className="text-xs font-bold text-primary">0%</span>
+                <span className="text-xs font-bold text-primary">
+                  {progress}%
+                </span>
               </div>
             </div>
             <div className="">
@@ -124,13 +136,24 @@ const ProyectosDetailPage = () => {
                 Progreso
               </div>
               <div className="text-xs text-base-content/70">
-                0/2 completadas
+                {proyecto?.tareas_completadas || 0}/
+                {proyecto?.tareas_total || 0} completadas
               </div>
-              <div className="badge badge-warning badge-xs mt-1">Ejecución</div>
+
+              {proyecto && (
+                <div
+                  className={`badge badge-xs  mt-1 ${getProyectStateColor(
+                    proyecto?.estado
+                  )}`}
+                >
+                  {proyecto?.estado}
+                </div>
+              )}
             </div>
           </div>
         </div>
 
+        {/* Información del Proyecto */}
         <div className="p-4 border-b border-base-300">
           <h3 className="font-semibold text-base-content mb-2 text-sm">
             Información del Proyecto
@@ -139,95 +162,94 @@ const ProyectosDetailPage = () => {
             <div className="flex justify-between">
               <span className="text-xs text-base-content/70">Inicio:</span>
               <span className="text-xs font-medium text-base-content/70">
-                25/07/2025
+                {formatDate(proyecto?.fecha_inicio)}
               </span>
             </div>
             <div className="flex justify-between">
               <span className="text-xs text-base-content/70">Fin:</span>
               <span className="text-xs font-medium text-base-content/70">
-                24/08/2025
+                {formatDate(proyecto?.fecha_fin)}
               </span>
             </div>
             <div className="flex justify-between">
               <span className="text-xs text-base-content/70">Líder:</span>
               <span className="text-xs font-medium text-base-content/70">
-                ger1_ger1
+                {proyecto?.lider.username}
               </span>
             </div>
             <div className="flex justify-between">
               <span className="text-xs text-base-content/70">Unidad:</span>
               <span className="text-xs font-medium text-base-content/70">
-                VP001
+                {proyecto?.unidad_responsable.codigo || ""}
               </span>
             </div>
           </div>
+        </div>
 
-          <div className="mt-4">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-xs text-base-content/70">Miembros:</span>
-              <span className="text-xs font-medium text-base-content/70">
-                99+
-              </span>
+        {/* Miembros */}
+        <div className="p-4 border-b border-base-300">
+          <div className="flex items-center justify-between mb-2">
+            <span className="font-semibold text-base-content text-sm">Miembros</span>
+            <div className="tooltip" data-tip="Ver Miembros">
+              <button className="btn btn-ghost btn-circle btn-xs btn-primary">
+                <Eye className="w-4 h-4"></Eye>
+              </button>
             </div>
+          </div>
 
-            <div className="flex items-center justify-between">
-              <div className="avatar-group -space-x-3 rtl:space-x-reverse">
-                {Array.from({ length: 2 }).map((_, index) => (
-                  <div className="avatar">
-                    <div className="w-6">
-                      <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
-                    </div>
-                  </div>
-                ))}
-
-                <div className="avatar placeholder">
-                  <div className="bg-neutral text-neutral-content w-6">
-                    <span className="text-xs">99+</span>
+          <div className="flex items-center justify-between">
+            <div className="avatar-group -space-x-3 rtl:space-x-reverse">
+              {Array.from({ length: 2 }).map((_, index) => (
+                <div key={index} className="avatar avatar-placeholder">
+                  <div
+                    className={`w-8 rounded-full bg-primary text-primary-content ${
+                      index === 0 ? "bg-primary" : "bg-secondary"
+                    }`}
+                  >
+                    <span className="text-md font-bold">JG</span>
                   </div>
                 </div>
-              </div>
-              <div className="tooltip" data-tip="Agregar miembro">
-                <button className="btn p-2 btn-ghost btn-primary btn-circle btn-sm  ">
-                  <UserPlusIcon />
+              ))}
+
+              {proyecto?.miembros_total && proyecto.miembros_total > 2 && (
+                <div className="avatar placeholder">
+                  <div className="bg-neutral text-neutral-content w-6">
+                    <span className="text-xs">
+                      {proyecto.miembros_total > 99
+                        ? "99+"
+                        : proyecto.miembros_total}
+                    </span>
+                  </div>
+                </div>
+              )}
+            </div>
+            <div className="join join-horizontal shadow-2xl ">
+              <div className=" tooltip" data-tip="Agregar Miembro">
+                <button className="join-item btn btn-ghost btn-primary btn-xs  ">
+                  <UserPlusIcon className="w-4 h-4" />
                 </button>
               </div>
             </div>
           </div>
         </div>
-
+        {/* Vistas */}
         <div className="p-4 border-b border-base-300">
           <h3 className="font-semibold text-base-content mb-2 text-sm">
             Vistas
           </h3>
           <div className="space-y-1">
-            <button
-              className="sidebar-item active w-full flex items-center gap-2 p-2 rounded-lg text-left text-sm"
-              onClick={() => switchView("tableros")}
-            >
-              <Columns2 className="w-4 h-4" />
-              <span>Tableros</span>
-            </button>
-            <button
-              className="sidebar-item w-full flex items-center gap-2 p-2 rounded-lg text-left text-sm"
-              onClick={() => switchView("gantt")}
-            >
-              <ChartBarStacked className="w-4 h-4" />
-              <span>Gantt</span>
-            </button>
-            <button
-              className="sidebar-item w-full flex items-center gap-2 p-2 rounded-lg text-left text-sm"
-              onClick={() => switchView("calendar")}
-            >
-              <Calendar1Icon className="w-4 h-4" />
-              <span>Calendario</span>
-            </button>
-            <button
-              className="sidebar-item w-full flex items-center gap-2 p-2 rounded-lg text-left text-sm"
-              onClick={() => switchView("files")}
-            >
-              <FolderClosed className="w-4 h-4" />
-              <span>Archivos</span>
-            </button>
+            {views.map((view) => (
+              <button
+                key={view.name}
+                className={`btn btn-ghost btn-primary w-full flex items-center justify-start gap-2 p-2 rounded-lg text-left text-sm ${
+                  view.isActive ? "btn-active" : ""
+                }`}
+                onClick={view.onClick}
+              >
+                {view.icon}
+                <span>{view.name}</span>
+              </button>
+            ))}
           </div>
         </div>
 
@@ -236,20 +258,10 @@ const ProyectosDetailPage = () => {
             <i className="fas fa-plus mr-1"></i>
             Nueva Tarea
           </button>
-          <div className="flex gap-2">
-            <button className="btn btn-outline btn-xs flex-1">
-              <SettingsIcon fill="" className="w-4 h-4" />
-            </button>
-            <button className="btn btn-outline btn-xs flex-1">
-              <Trash className="w-4 h-4" />
-            </button>
-          </div>
         </div>
       </div>
 
-      <div className="w-full h-full">
-        Contenido
-      </div>
+      <div className="w-full h-full">Contenido</div>
     </div>
   );
 };

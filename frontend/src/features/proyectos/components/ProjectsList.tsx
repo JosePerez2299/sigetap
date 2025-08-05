@@ -47,27 +47,22 @@ const ProjectsList = ({
   return (
     <div className="relative min-h-[400px]">
       {/* Loading Skeleton */}
-      <div
-        className={`absolute inset-0 transition-all duration-500 ease-in-out transform ${
-          isLoading
-            ? "opacity-100 translate-y-0 pointer-events-auto"
-            : "opacity-0 -translate-y-4 pointer-events-none"
-        }`}
-      >
-        <div className="h-16 skeleton mb-4 rounded-lg"></div>
-        <div className="space-y-3">
-          <div className="h-12 skeleton rounded-lg"></div>
-          {Array.from({ length: 4 }).map((_, index) => (
-            <div
-              key={index}
-              className="h-16 skeleton rounded-lg"
-              style={{
-                animationDelay: `${index * 100}ms`,
-              }}
-            ></div>
-          ))}
+      {isLoading && (
+        <div>
+          <div className="space-y-3">
+            <div className="h-12 skeleton rounded-lg"></div>
+            {Array.from({ length: 4 }).map((_, index) => (
+              <div
+                key={index}
+                className="h-16 skeleton rounded-lg"
+                style={{
+                  animationDelay: `${index * 100}ms`,
+                }}
+              ></div>
+            ))}
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Error State */}
       <AnimatePresence>
@@ -95,7 +90,7 @@ const ProjectsList = ({
 
       {/* Empty State */}
       <AnimatePresence>
-        {!isLoading && !error && projects.length === 0 && (
+        {!isLoading && projects && projects.length === 0 && (
           <motion.div
             {...fadeInUp}
             className="absolute inset-0 flex items-center justify-center"
@@ -118,7 +113,7 @@ const ProjectsList = ({
 
       {/* Content */}
       <AnimatePresence>
-        {!isLoading && !error && projects.length > 0 && (
+        {projects && projects.length > 0 && (
           <motion.ul
             className="list bg-base-100 space-y-2"
             variants={listVariants}

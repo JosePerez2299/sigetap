@@ -1,6 +1,7 @@
 import { privateApi } from "../api/privateApi";
 import { urls } from "../api/urls";
 import {
+  type ProyectoType,
   type ProyectoTypeResponse,
 } from "../types/generalTypes";
 import { handleErrorMessage } from "../utils/handleErrorMessage";
@@ -28,6 +29,16 @@ const getAll = async (filters: FiltersState): Promise<ProyectoTypeResponse> => {
   }
 };
 
+const getOne = async (id: number): Promise<ProyectoType> => {
+  try {
+    const response = await privateApi.get(`${urls.proyectos}${id}/`);
+    return response.data;
+  } catch (error) {
+    throw new Error(handleErrorMessage(error));
+  }
+};
+
 export const proyectosServices = {
   getAll,
+  getOne,
 };

@@ -66,6 +66,7 @@ export const ProyectoSchema = z.object({
   tareas_total: z.number(),
   tareas_pendientes: z.number(),
   miembros_total: z.number().optional(),
+  miembros: UserSchema.array().optional(),
   tareas: TaskSchema.array().optional(),
 });
 

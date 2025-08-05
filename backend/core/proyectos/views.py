@@ -39,3 +39,11 @@ class ProyectoDetail(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [IsAuthenticated]
     queryset = Proyecto.objects.all()
     serializer_class = ProyectoSerializer
+
+    def get_object(self):
+        proyecto = super().get_object()
+        proyecto.tareas_total = proyecto.tareas.count()
+        proyecto.tareas_completadas = proyecto.tareas.filter(estado='Completado').count()
+        proyecto.tareas_pendientes = proyecto.tareas.filter(estado='Pendiente').count()
+        return proyecto
+        

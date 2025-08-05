@@ -1,17 +1,17 @@
-import { EstadoProyectoEnum } from "../types/generalTypes";
+import { EstadoProyectoEnum, type EstadoProyectoType } from "../types/generalTypes";
 
-const getEstadoColor = (estado: string) => {
+const getEstadoColor = (estado: EstadoProyectoType) => {
     switch (estado) {
           case EstadoProyectoEnum.Planificado:
-            return "bg-info";
+            return "badge-info";
           case EstadoProyectoEnum.Ejecucion:
-            return "bg-warning";
+            return "badge-warning";
           case EstadoProyectoEnum.Pausado:
-            return "bg-gray-600";
+            return "badge-error";
           case EstadoProyectoEnum.Finalizado:
-            return "bg-success";
+            return "badge-success";
           default:
-            return "bg-primary";
+            return "badge-primary";
         }
     };
 

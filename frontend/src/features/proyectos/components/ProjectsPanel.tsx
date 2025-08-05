@@ -18,7 +18,7 @@ const ProjectsPanel: React.FC<ProjectsPanelProps> = ({
           <ProjectsHeader unidad={unidad}></ProjectsHeader>
         </div>
       </div>
-      <div className="card border border-base-300 shadow-lg w-full">
+      <div className="card border border-base-300  shadow-lg w-full">
         <div className="card-body">
           <ProjectsList
             projects={data?.data || []}
