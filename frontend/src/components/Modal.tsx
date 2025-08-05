@@ -2,16 +2,6 @@
 import React from "react";
 import { AnimatePresence, motion } from "framer-motion";
 
-const backdropVariants = {
-  hidden: { opacity: 0 },
-  visible: { opacity: 1 },
-};
-
-const modalVariants = {
-  hidden: { y: "-20%", opacity: 0, scale: 0.9 },
-  visible: { y: "0%", opacity: 1, scale: 1 },
-};
-
 type ModalProps = {
   isOpen: boolean;
   onClose: () => void;
@@ -28,23 +18,22 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children, header, footer
   return (
     <AnimatePresence>
       {isOpen && (
-        // DaisyUI espera .modal.modal-open para mostrar la modal
+        // Backdrop con fade simple
         <motion.div
           className="modal modal-open fixed inset-0 bg-black bg-opacity-50"
           onClick={handleBackdropClick}
-          variants={backdropVariants}
-          initial="hidden"
-          animate="visible"
-          exit="hidden"
-          transition={{ duration: 0.2 }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.15, ease: "easeOut" }}
         >
+          {/* Modal con fade + scale simple */}
           <motion.div
             className="modal-box relative max-w-lg w-11/12"
-            variants={modalVariants}
-            initial="hidden"
-            animate="visible"
-            exit="hidden"
-            transition={{ type: "spring", stiffness: 300, damping: 25 }}
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+            transition={{ duration: 0.15, ease: "easeOut" }}
           >
             {header && <div className="mb-4">{header}</div>}
 
