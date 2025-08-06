@@ -30,3 +30,19 @@ class Proyecto(models.Model):
         verbose_name = "Proyecto"
         verbose_name_plural = "Proyectos"
     
+
+class Tablero(models.Model):
+    nombre = models.CharField(max_length=100)
+    proyecto = models.ForeignKey(Proyecto, verbose_name=("Proyecto"), on_delete=models.CASCADE, related_name="tableros")
+    icono = models.CharField(max_length=50, blank=True, null=True)  # Puedes usar una librería de iconos o simplemente almacenar el nombre del icono
+    color_fondo = models.CharField(max_length=7, blank=True, null=True)  # Almacena el color en formato HEX, por ejemplo: #FFFFFF
+
+    def __str__(self):
+        return f"{self.nombre} - {self.proyecto.nombre}"
+    
+    class Meta:
+        verbose_name = "Tablero"
+        verbose_name_plural = "Tableros"
+        ordering = ['nombre']
+
+

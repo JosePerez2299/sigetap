@@ -1,7 +1,7 @@
 
 from rest_framework import generics
 from .models import Proyecto
-from .serializers import ProyectoSerializer
+from .serializers import ProyectoSerializer, TableroSerializer
 from drf_spectacular.utils import extend_schema_view, extend_schema
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.filters import SearchFilter, OrderingFilter
@@ -12,7 +12,7 @@ from drf_spectacular.utils import OpenApiParameter
 from django.db.models import Count, Q
 
 
-class ProyectoList(generics.ListAPIView):
+class ProyectoList(generics.ListCreateAPIView):
     pagination_class = ProyectoPagination
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     filterset_class = ProyectoFilter
@@ -22,7 +22,7 @@ class ProyectoList(generics.ListAPIView):
 
     def get_queryset(self):
         qs = Proyecto.objects.all()
-        qs = qs.select_related('lider','lider__unidad')
+        qs = qs.select_related('lider', 'lider__unidad')
         qs = qs.select_related('unidad_responsable')
         qs = qs.annotate(
             tareas_total=Count('tareas'),
@@ -43,7 +43,13 @@ class ProyectoDetail(generics.RetrieveUpdateDestroyAPIView):
     def get_object(self):
         proyecto = super().get_object()
         proyecto.tareas_total = proyecto.tareas.count()
-        proyecto.tareas_completadas = proyecto.tareas.filter(estado='Completado').count()
-        proyecto.tareas_pendientes = proyecto.tareas.filter(estado='Pendiente').count()
+        proyecto.tareas_completadas = proyecto.tareas.filter(
+            estado='Completado').count()
+        proyecto.tareas_pendientes = proyecto.tareas.filter(
+            estado='Pendiente').count()
         return proyecto
-        
+
+
+class TableroCreate(generics.CreateAPIView):
+    # permission_classes = [IsAuthenticated]
+    serializer_class = TableroSerializer

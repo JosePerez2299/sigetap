@@ -14,7 +14,6 @@ class UnidadSerializer(serializers.ModelSerializer):
 
 class UserSerializer(serializers.ModelSerializer):
     unidad = UnidadSerializer()
-    
     class Meta: 
         model = User
         fields = ['id', 'username', 'email', 'first_name', 'last_name', 'p00', 
