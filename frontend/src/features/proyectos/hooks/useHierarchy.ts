@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { useTreeState } from "../hooks/useTreeState";
-import { userServices } from "../../../services/userServices";
+import { userServices } from "../../users/services/userServices";
 
 export const useHierarchy = (codigoUnidad?: string) => {
     const query = useQuery({

@@ -1,4 +1,4 @@
-import { EstadoProyectoEnum, type EstadoProyectoType } from "../types/generalTypes";
+import { EstadoProyectoEnum, type EstadoProyectoType } from "../features/proyectos/types/Projects";
 
 const getEstadoColor = (estado: EstadoProyectoType) => {
     switch (estado) {

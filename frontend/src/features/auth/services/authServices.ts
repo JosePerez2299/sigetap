@@ -1,4 +1,4 @@
-import { publicApi } from '../api/publicApi';
+import { publicApi } from '../../../api/publicApi';
 
 import {
   LoginResponseSchema,
@@ -7,7 +7,7 @@ import {
   type LoginResponseType,
   type RefreshTokenType,
 } from "../types/authTypes";
-import { urls } from "../api/urls";
+import { urls } from "../../../api/urls";
 
 const login = async (credentials: Credentials): Promise<LoginResponseType> => {
   const response = await publicApi.post(urls.login, credentials);

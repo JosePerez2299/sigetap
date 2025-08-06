@@ -1,21 +1,20 @@
 import { Funnel, FunnelX, XIcon } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { useDebounce } from "use-debounce";
-import type { FiltersState, ProjectsFiltersProps } from "../types/Projects";
-import type { EstadoProyectoType } from "../../../types/generalTypes";
+import type { ProjectsFiltersProps } from "../types/Projects";
+import type { EstadoProyectoType } from "../types/Projects"
 
 const ProjectsFilters2: React.FC<ProjectsFiltersProps> = ({
   showFilters,
   setShowFilters,
   filters,
-  resetFilters,
   onFilterChange,
 }) => {
   // Estado local para el valor del input
   const [inputValue, setInputValue] = useState(filters?.searchTerm || "");
 
   // Valor debounced con 500ms de retraso - CORRECCIÓN AQUÍ
-  const [debouncedValue, setDebouncedValue] = useDebounce(inputValue, 500);
+  const [debouncedValue, _] = useDebounce(inputValue, 500);
 
   const FILTER_OPTIONS: { label: string; value: EstadoProyectoType | "" }[] = [
     { label: "Todos", value: "" },

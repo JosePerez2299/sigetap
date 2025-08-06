@@ -1,6 +1,6 @@
 import React from "react";
 import { Routes, Route, Navigate, useLocation } from "react-router-dom";
-import MainLayout from "../layouts/MainLayout";
+import MainLayout from "../features/ui/layout/MainLayout";
 import PrivateRoute from "./PrivateRoutes";
 import PublicRoute from "./PublicRoutes";
 import {
@@ -14,7 +14,7 @@ import {
 import HomePage from "../pages/HomePage";
 import Logout from "../pages/Logout";
 import ROUTES from "./Routes";
-import ProyectDetailLayout from "../layouts/ProyectDetailLayout";
+import ProyectDetailLayout from "../features/proyectos/layout/ProyectDetailLayout";
 import BoardPanel from "../features/proyectos/components/BoardPanel";
 import GanttPanel from "../features/proyectos/components/GanttPanel";
 import CalendarPanel from "../features/proyectos/components/CalendarPanel";

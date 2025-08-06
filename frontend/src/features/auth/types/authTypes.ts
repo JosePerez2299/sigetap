@@ -1,5 +1,4 @@
 import { z } from "zod";
-import { UserSchema } from "./generalTypes";
 
 export const CredentialsSchema = z.object({
   username: z.string(),

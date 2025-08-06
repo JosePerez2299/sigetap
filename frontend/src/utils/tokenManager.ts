@@ -1,4 +1,4 @@
-import type { LoginResponseType } from "../types/authTypes";
+import type { LoginResponseType } from "../features/auth/types/authTypes";
 import type { UserType } from "../types/generalTypes";
 
 const getTokens = () => {

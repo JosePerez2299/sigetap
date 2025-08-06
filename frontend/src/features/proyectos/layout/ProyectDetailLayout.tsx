@@ -1,46 +1,26 @@
 import { useEffect, useState } from "react";
 import { Outlet, useNavigate, useParams } from "react-router-dom";
-import type { ProyectoType } from "../types/generalTypes";
-import {
-  ArrowLeft,
-  Info,
-  ListIcon,
-  ListMinusIcon,
-  UserPlusIcon,
-  User,
-  Columns2,
-  ChartBarStacked,
-  Calendar1Icon,
-  FileIcon,
-  Folder,
-  FolderClosed,
-  SettingsIcon,
-  ShareIcon,
-  Trash,
-  UserXIcon,
-  Eye,
-} from "lucide-react";
-import { formatDate } from "../utils/formatDate";
+import type { ProyectoType } from "../types/Projects";
 import { proyectosServices } from "../services/proyectosServices";
-import getProyectStateColor from "../utils/getProyectStateColor";
-import AsideDetail from "../features/proyectos/components/AsideDetail";
-import { type ViewNameType } from "../features/proyectos/types/Projects";
-import ROUTES from "../routes/Routes";
+import AsideDetail from "../components/AsideDetail";
+import { type ViewNameType } from "../types/Projects";
+import ROUTES from "../../../routes/Routes";
 import { useQuery } from "@tanstack/react-query";
 const ProyectDetailLayout = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const [view, setView] = useState<ViewNameType>("tableros");
   const [proyecto, setProyecto] = useState<ProyectoType | null>(null);
-  const { data: proyectoData, isLoading: isLoadingProyecto, error: errorProyecto } = useQuery({
+  const {
+    data: proyectoData,
+    isLoading: isLoadingProyecto,
+    error: errorProyecto,
+  } = useQuery({
     queryKey: ["proyecto", id],
     queryFn: () => proyectosServices.getOne(Number(id)),
     enabled: !!id,
   });
 
-  const switchView = (view: ViewNameType) => {
-    setView(view);
-  };
   if (!id) {
     navigate(ROUTES.PROYECTOS);
     return null;
@@ -78,8 +58,6 @@ const ProyectDetailLayout = () => {
           <div className="w-1/4 min-w-72  bg-base-100 shadow-lg border-r border-base-300 flex flex-col">
             {/* Aside */}
             <AsideDetail
-              currentView={view}
-              switchView={switchView}
               proyecto={proyectoData}
             />
           </div>

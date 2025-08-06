@@ -1,7 +1,7 @@
 // components/ProjectDetailModal.tsx
 import React from "react";
 import type { ProyectoType } from "../../../types/generalTypes";
-import Modal from "../../../components/Modal";
+import Modal from "../../ui/components/Modal";
 import { Info } from "lucide-react";
 import { Link } from "react-router-dom";
 const ProjectDetailModal = ({

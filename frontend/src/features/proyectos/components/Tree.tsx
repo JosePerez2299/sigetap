@@ -1,12 +1,6 @@
 import React, { useState, useCallback } from "react";
-import {
-  ChevronRight,
-  ChevronDown,
-  Folder,
-  FolderOpen,
-  Search,
-} from "lucide-react";
-import type { TreeNodeProps, TreeProps, TreeNodeData } from "../types/Tree";
+import { Folder, Search } from "lucide-react";
+import type { TreeProps, TreeNodeData } from "../types/Tree";
 
 import TreeNode from "./TreeNode";
 
@@ -70,6 +64,20 @@ const Tree: React.FC<TreeProps> = ({
     []
   );
 
+  // Función auxiliar para verificar si hay coincidencias en los hijos
+  const hasSearchMatch = (nodes: TreeNodeData[], term: string): boolean => {
+    for (const node of nodes) {
+      if (
+        node.nombre.toLowerCase().includes(term.toLowerCase()) ||
+        node.codigo.toLowerCase().includes(term.toLowerCase()) ||
+        hasSearchMatch(node.hijos, term)
+      ) {
+        return true;
+      }
+    }
+    return false;
+  };
+
   // Función recursiva para expandir automáticamente nodos que contienen resultados de búsqueda
   const autoExpandSearchResults = useCallback(
     (nodes: TreeNodeData[], term: string) => {
@@ -90,22 +98,8 @@ const Tree: React.FC<TreeProps> = ({
       traverse(nodes);
       setExpandedNodes((prev) => new Set([...prev, ...expandedIds]));
     },
-    []
+    [hasSearchMatch]
   );
-
-  // Función auxiliar para verificar si hay coincidencias en los hijos
-  const hasSearchMatch = (nodes: TreeNodeData[], term: string): boolean => {
-    for (const node of nodes) {
-      if (
-        node.nombre.toLowerCase().includes(term.toLowerCase()) ||
-        node.codigo.toLowerCase().includes(term.toLowerCase()) ||
-        hasSearchMatch(node.hijos, term)
-      ) {
-        return true;
-      }
-    }
-    return false;
-  };
 
   // Filtrar datos basado en el término de búsqueda
   const filteredData = searchTerm ? filterNodes(data, searchTerm) : data;
@@ -180,4 +174,3 @@ const Tree: React.FC<TreeProps> = ({
 };
 
 export default Tree;
-

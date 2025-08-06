@@ -1,7 +1,7 @@
-import { privateApi } from "../api/privateApi";
-import { urls } from "../api/urls";
-import type { UserType } from "../types/generalTypes";
-import type { TreeNodeData } from "../features/proyectos/types/Tree";
+import { privateApi } from "../../../api/privateApi";
+import { urls } from "../../../api/urls";
+import type { UserType } from "../../../types/generalTypes";
+import type { TreeNodeData } from "../../proyectos/types/Tree";
 
 const getUser = async (): Promise<UserType> => {
     await new Promise<void>((resolve) => setTimeout(resolve, 1000));

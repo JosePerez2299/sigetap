@@ -1,8 +1,8 @@
 import { useDispatch, useSelector } from "react-redux";
-import { clearError } from "../store/auth/authSlice";
+import { clearError } from "../../../store/auth/authSlice";
 import type { Credentials } from "../types/authTypes";
-import type { RootState, AppDispatch } from "../store/RootState"; // Asegúrate de tener estos tipos
-import { loginThunk, logoutThunk } from "../store/auth/authThunks";
+import type { RootState, AppDispatch } from "../../../store/RootState"; // Asegúrate de tener estos tipos
+import { loginThunk, logoutThunk } from "../../../store/auth/authThunks";
 
 export function useAuth() {
   const dispatch = useDispatch<AppDispatch>();

@@ -1,11 +1,11 @@
-import { privateApi } from "../api/privateApi";
-import { urls } from "../api/urls";
+import { privateApi } from "../../../api/privateApi";
+import { urls } from "../../../api/urls";
 import {
   type ProyectoType,
   type ProyectoTypeResponse,
-} from "../types/generalTypes";
-import { handleErrorMessage } from "../utils/handleErrorMessage";
-import { type FiltersState } from "../features/proyectos/types/Projects";
+} from "../types/Projects";
+import { handleErrorMessage } from "../../../utils/handleErrorMessage";
+import { type FiltersState } from "../../../features/proyectos/types/Projects";
 
 const getAll = async (filters: FiltersState): Promise<ProyectoTypeResponse> => {
   const { page, pageSize, sortBy, filterBy, searchTerm, unidadId } = filters;

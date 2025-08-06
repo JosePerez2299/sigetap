@@ -1,7 +1,7 @@
 import { userServices } from "../services/userServices";
 import { useQuery } from "@tanstack/react-query";
 import { useSelector } from "react-redux";
-import type { RootState } from "../store/RootState";
+import type { RootState } from "../../../store/RootState";
 
 export const useUser = () => {
   const userStore = useSelector((state: RootState) => state.auth.user);

@@ -1,7 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import type { Credentials } from "../../types/authTypes";
+import type { Credentials } from "../../features/auth/types/authTypes";
 import { tokenManager } from "../../utils/tokenManager";
-import { authServices } from "../../services/authServices";
+import { authServices } from "../../features/auth/services/authServices";
 import { handleErrorMessage } from "../../utils/handleErrorMessage";
 
 // Thunk para login

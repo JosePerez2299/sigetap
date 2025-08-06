@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { Folder } from "lucide-react";
 import { useHierarchy } from "../features/proyectos/hooks/useHierarchy";
-import { useUser } from "../hooks/getUser";
+import { useUser } from "../features/users/hooks/getUser";
 import { useFilters } from "../features/proyectos/hooks/useFilters";
 import ProjectsFilters from "../features/proyectos/components/ProjectsFilters";
 import HierarchyPanel from "../features/proyectos/components/HierarchyPanel";

@@ -2,7 +2,7 @@ import type { ProjectsPanelProps } from "../types/Projects";
 import ProjectsHeader from "./ProjectsHeader";
 import { useProjects } from "../hooks/useProjects";
 import ProjectsList from "./ProjectsList";
-import Pagination from "../../../components/Pagination";
+import Pagination from "../../ui/components/Pagination";
 
 const ProjectsPanel: React.FC<ProjectsPanelProps> = ({
   unidad,

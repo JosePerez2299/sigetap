@@ -12,9 +12,9 @@ import {
 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { useState, useRef, useEffect } from "react";
-import ROUTES from "../routes/Routes";
+import ROUTES from "../../../routes/Routes";
 import { useSelector } from "react-redux";
-import type { RootState } from "../store/RootState";
+import type { RootState } from "../../../store/RootState";
 
 const Navbar = () => {
   const user = useSelector((state: RootState) => state.auth.user);
