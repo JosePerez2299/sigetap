@@ -8,17 +8,26 @@ import {
   type RefreshTokenType,
 } from "../types/authTypes";
 import { urls } from "../../../api/urls";
+import { throwServiceError } from "../../../utils/handleErrorMessage";
 
 const login = async (credentials: Credentials): Promise<LoginResponseType> => {
   const response = await publicApi.post(urls.login, credentials);
-  return LoginResponseSchema.parse(response.data);
+  try {
+    return LoginResponseSchema.parse(response.data);
+  } catch (error) {
+    throw throwServiceError(error);
+  }
 };
 
 const refreshToken = async (refreshToken: string): Promise<RefreshTokenType> => {
   const response = await publicApi.post(urls.refreshToken, {
     refresh: refreshToken,
   });
-  return RefreshTokenSchema.parse(response.data);
+  try {
+    return RefreshTokenSchema.parse(response.data);
+  } catch (error) {
+    throw throwServiceError(error);
+  }
 };
 
 

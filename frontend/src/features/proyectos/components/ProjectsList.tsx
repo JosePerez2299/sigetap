@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from "framer-motion";
-import type { ProyectoType } from "../../../types/generalTypes";
+import type { ProyectoType } from "../types/Projects";
 import { FileX, FileX2Icon } from "lucide-react";
 import ProjectCard from "./ProjectCard";
 
@@ -90,7 +90,7 @@ const ProjectsList = ({
 
       {/* Empty State */}
       <AnimatePresence>
-        {!isLoading && projects && projects.length === 0 && (
+        {!isLoading && !error && projects && projects.length === 0 && (
           <motion.div
             {...fadeInUp}
             className="absolute inset-0 flex items-center justify-center"

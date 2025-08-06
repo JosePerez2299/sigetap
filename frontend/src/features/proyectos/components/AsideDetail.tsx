@@ -1,5 +1,5 @@
-import { Link, useNavigate, useLocation } from "react-router-dom";
-import type { ProyectoType } from "../../../types/generalTypes";
+import { Link, useLocation } from "react-router-dom";
+import type { ProyectoType } from "../types/Projects";
 import {
   ArrowLeft,
   Info,
@@ -16,10 +16,7 @@ import ROUTES from "../../../routes/Routes";
 interface AsideDetailProps {
   proyecto: ProyectoType;
 }
-const AsideDetail = ({
-  proyecto,
-}: AsideDetailProps) => {
-  const navigate = useNavigate();
+const AsideDetail = ({ proyecto }: AsideDetailProps) => {
   const location = useLocation();
 
   const progress = proyecto.tareas_completadas / proyecto.tareas_total || 0;
@@ -29,25 +26,29 @@ const AsideDetail = ({
       name: "Tableros",
       icon: <Columns2 className="w-4 h-4" />,
       to: `${ROUTES.PROYECTOS}/${proyecto.id}/tableros`,
-      isActive: location.pathname === `${ROUTES.PROYECTOS}/${proyecto.id}/tableros`,
+      isActive:
+        location.pathname === `${ROUTES.PROYECTOS}/${proyecto.id}/tableros`,
     },
     {
       name: "Gantt",
       icon: <ChartBarStacked className="w-4 h-4" />,
       to: `${ROUTES.PROYECTOS}/${proyecto.id}/gantt`,
-      isActive: location.pathname === `${ROUTES.PROYECTOS}/${proyecto.id}/gantt`,
+      isActive:
+        location.pathname === `${ROUTES.PROYECTOS}/${proyecto.id}/gantt`,
     },
     {
       name: "Calendar",
       icon: <Calendar1Icon className="w-4 h-4" />,
       to: `${ROUTES.PROYECTOS}/${proyecto.id}/calendar`,
-      isActive: location.pathname === `${ROUTES.PROYECTOS}/${proyecto.id}/calendar`,
+      isActive:
+        location.pathname === `${ROUTES.PROYECTOS}/${proyecto.id}/calendar`,
     },
     {
-      name: "Archivos", 
+      name: "Archivos",
       icon: <FolderClosed className="w-4 h-4" />,
       to: `${ROUTES.PROYECTOS}/${proyecto.id}/files`,
-      isActive: location.pathname === `${ROUTES.PROYECTOS}/${proyecto.id}/files`,
+      isActive:
+        location.pathname === `${ROUTES.PROYECTOS}/${proyecto.id}/files`,
     },
   ];
   return (
@@ -55,12 +56,11 @@ const AsideDetail = ({
       {/* Header */}
       <div className="p-4 border-b bg-gradient-to-br border-base-300 from-base-100 via-base-100 to-primary/20">
         <div className="flex items-center gap-3 mb-3">
-          <button
-            onClick={() => navigate("/proyectos")}
-            className="btn btn-ghost btn-circle btn-sm"
-          >
-            <ArrowLeft className="fas fa-arrow-left text-base-content/70"></ArrowLeft>
-          </button>
+          <Link to={ROUTES.PROYECTOS} state={{ selectedNode: proyecto.unidad_responsable}}>
+          <div className="tooltip" data-tip="Listado">
+            <ArrowLeft className="btn btn-ghost btn-circle btn-sm text-base-content/70"></ArrowLeft>
+          </div>
+          </Link>
           <div className="flex-1 space-y-1">
             <h1 className="text-base font-bold text-base-content">
               {proyecto?.nombre}

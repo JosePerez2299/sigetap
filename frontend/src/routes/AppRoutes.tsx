@@ -13,6 +13,7 @@ import {
 } from "../pages/index";
 import HomePage from "../pages/HomePage";
 import Logout from "../pages/Logout";
+import ValidateInt from "../features/ui/components/ValidateInt";
 import ROUTES from "./Routes";
 import ProyectDetailLayout from "../features/proyectos/layout/ProyectDetailLayout";
 import BoardPanel from "../features/proyectos/components/BoardPanel";
@@ -24,27 +25,25 @@ const AppRoutes: React.FC = () => {
   const location = useLocation();
 
   return (
-      <Routes location={location} key={location.pathname}>
-        {/* Rutas públicas */}
-        <Route path="/" element={<PublicRoute />}>
-          <Route index element={<HomePage />} />
-          <Route path={ROUTES.LOGIN} element={<LoginPage />} />
-        </Route>
+    <Routes location={location} key={location.pathname}>
+      {/* Rutas públicas */}
+      <Route path="/" element={<PublicRoute />}>
+        <Route index element={<HomePage />} />
+        <Route path={ROUTES.LOGIN} element={<LoginPage />} />
+      </Route>
 
-        {/* Rutas privadas */}
-        <Route path="/" element={<PrivateRoute />}>
-          <Route element={<MainLayout />}>
-            <Route path={ROUTES.DASHBOARD} element={<Dashboard />} />
-            <Route path={ROUTES.PROYECTOS} element={<ProyectosPage />} />
-            <Route path={ROUTES.AUDITORY} element={<AuditoryPage />} />
-            <Route path={ROUTES.STATS} element={<StatsPage />} />
-            <Route path={ROUTES.LOGOUT} element={<Logout />} />
+      {/* Rutas privadas */}
+      <Route path="/" element={<PrivateRoute />}>
+        <Route element={<MainLayout />}>
+          <Route path={ROUTES.DASHBOARD} element={<Dashboard />} />
+          <Route path={ROUTES.PROYECTOS} element={<ProyectosPage />} />
+          <Route path={ROUTES.AUDITORY} element={<AuditoryPage />} />
+          <Route path={ROUTES.STATS} element={<StatsPage />} />
+          <Route path={ROUTES.LOGOUT} element={<Logout />} />
 
-            {/* Detalle de proyecto con rutas hijas */}
-            <Route
-              path={`${ROUTES.PROYECTOS}/:id`}
-              element={<ProyectDetailLayout />}
-            >
+          {/* Detalle de proyecto con rutas hijas */}
+          <Route path={`${ROUTES.PROYECTOS}/:id`} element={<ValidateInt />}>
+            <Route element={<ProyectDetailLayout />}>
               <Route index element={<Navigate to="tableros" replace />} />
               <Route path="tableros" element={<BoardPanel />} />
               <Route path="gantt" element={<GanttPanel />} />
@@ -53,10 +52,11 @@ const AppRoutes: React.FC = () => {
             </Route>
           </Route>
         </Route>
+      </Route>
 
-        {/* Fallback */}
-        <Route path="*" element={<NotFound404 />} />
-      </Routes>
+      {/* Fallback */}
+      <Route path="*" element={<NotFound404 />} />
+    </Routes>
   );
 };
 

@@ -6,9 +6,11 @@ import { useFilters } from "../features/proyectos/hooks/useFilters";
 import ProjectsFilters from "../features/proyectos/components/ProjectsFilters";
 import HierarchyPanel from "../features/proyectos/components/HierarchyPanel";
 import ProjectsPanel from "../features/proyectos/components/ProjectsPanel";
+import { useLocation } from "react-router-dom";
 const ProyectosPage = () => {
   const { user, isLoading: isLoadingUser, error: errorUser } = useUser();
-
+  const location = useLocation();
+  const selectedFromLink = location.state?.selectedNode;
   const {
     data,
     isLoading,
@@ -17,6 +19,12 @@ const ProyectosPage = () => {
     selectedNodeId,
     handleNodeSelect,
   } = useHierarchy(user?.unidad?.codigo);
+
+  useEffect(() => {
+    if (selectedFromLink) {
+      handleNodeSelect(selectedFromLink);
+    }
+  }, [selectedFromLink]);
 
   const {
     filters,

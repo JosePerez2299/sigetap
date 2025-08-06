@@ -36,7 +36,7 @@ class ProyectoList(generics.ListCreateAPIView):
 
 
 class ProyectoDetail(generics.RetrieveUpdateDestroyAPIView):
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
     queryset = Proyecto.objects.all()
     serializer_class = ProyectoSerializer
 

@@ -4,7 +4,7 @@ import {
   type ProyectoType,
   type ProyectoTypeResponse,
 } from "../types/Projects";
-import { handleErrorMessage } from "../../../utils/handleErrorMessage";
+import { throwServiceError } from "../../../utils/handleErrorMessage";
 import { type FiltersState } from "../../../features/proyectos/types/Projects";
 
 const getAll = async (filters: FiltersState): Promise<ProyectoTypeResponse> => {
@@ -25,7 +25,7 @@ const getAll = async (filters: FiltersState): Promise<ProyectoTypeResponse> => {
 
     return response.data;
   } catch (error) {
-    throw new Error(handleErrorMessage(error));
+    throw throwServiceError(error);
   }
 };
 
@@ -36,7 +36,7 @@ const getOne = async (id: number): Promise<ProyectoType> => {
     const response = await privateApi.get(`${urls.proyectos}${id}/`);
     return response.data;
   } catch (error) {
-    throw new Error(handleErrorMessage(error));
+    throw throwServiceError(error);
   }
 };
 
